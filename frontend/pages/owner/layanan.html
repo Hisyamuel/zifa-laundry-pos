@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Layanan & Tarif (Owner) - Zifa Laundry</title>
+    <!-- Pastikan path menuju CSS sudah benar -->
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link rel="stylesheet" href="/frontend/css/component.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="shell">
+        <!-- Sidebar Menu -->
+        <nav class="side">
+            <div class="logo"><i>Z</i>Zifa Laundry</div>
+
+            <a href="/frontend/pages/owner/dashboard.html" class="menu-link">Dashboard</a>
+            <a href="/frontend/pages/owner/layanan.html" class="menu-link on">Layanan & Tarif</a>
+            <a href="/frontend/pages/owner/pegawai.html" class="menu-link">Akun Pegawai (2)</a>
+            <a href="/frontend/pages/owner/laporan.html" class="menu-link">Laporan Keuangan</a>
+            <a href="/frontend/pages/owner/riwayat.html" class="menu-link">Riwayat Transaksi</a>
+
+            <!-- Tombol Keluar didempetkan di bawah nav -->
+            <a href="/frontend/pages/auth/auth.html" class="menu-link logout-btn">Keluar</a>
+
+            <div class="who">
+                Owner · Pemilik usaha
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main loader">
+            <!-- Header -->
+            <div class="hd">
+                <div>
+                    <h1>Layanan & Tarif</h1>
+                    <p>Kelola data master layanan dan harganya.</p>
+                </div>
+            </div>
+
+            <!-- Content Grid (2 Columns) -->
+            <div class="grid g2">
+                <!-- Tabel Daftar Layanan (Kiri) -->
+                <div class="card">
+                    <h3>Daftar layanan</h3>
+                    <div class="tw">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Layanan</th>
+                                    <th>Tipe</th>
+                                    <th>Tarif</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Cuci Kering Lipat</td>
+                                    <td>Kiloan</td>
+                                    <td>Rp 6.000 / kg</td>
+                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
+                                </tr>
+                                <tr>
+                                    <td>Cuci + Setrika</td>
+                                    <td>Kiloan</td>
+                                    <td>Rp 8.000 / kg</td>
+                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
+                                </tr>
+                                <tr>
+                                    <td>Setrika Saja</td>
+                                    <td>Kiloan</td>
+                                    <td>Rp 5.000 / kg</td>
+                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
+                                </tr>
+                                <tr>
+                                    <td>Bedcover</td>
+                                    <td>Satuan</td>
+                                    <td>Rp 25.000 / pcs</td>
+                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
+                                </tr>
+                                <tr>
+                                    <td>Jas</td>
+                                    <td>Satuan</td>
+                                    <td>Rp 30.000 / pcs</td>
+                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
+                                </tr>
+                                <tr>
+                                    <td>Sepatu</td>
+                                    <td>Satuan</td>
+                                    <td>Rp 35.000 / pasang</td>
+                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Form Tambah Layanan (Kanan) -->
+                <div class="card">
+                    <h3>Tambah layanan</h3>
+
+                    <label class="f">
+                        Nama layanan
+                        <input type="text" placeholder="mis. Cuci Kering Lipat">
+                    </label>
+
+                    <label class="f">
+                        Tipe
+                        <select>
+                            <option>Kiloan</option>
+                            <option>Satuan</option>
+                        </select>
+                    </label>
+
+                    <label class="f">
+                        Tarif (Rp)
+                        <input type="number" placeholder="0">
+                    </label>
+
+                    <button class="b p" style="margin-top: 12px;">Simpan layanan</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

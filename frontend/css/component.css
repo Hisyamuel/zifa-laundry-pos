@@ -1,0 +1,64 @@
+/* frontend/css/components.css */
+
+/* Gaya Dasar Tombol (Button) */
+.b {
+    border: 1px solid var(--ln);
+    background: var(--sf);
+    border-radius: 9px;
+    padding: 8px 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--tx); /* Pastikan warna teks mengikuti tema gelap */
+}
+
+/* Tombol Utama (Primary Button) - Warna Biru */
+.b.p {
+    background: var(--ink);
+    color: var(--on);
+    border-color: var(--ink);
+}
+
+.b.p:hover {
+    background: var(--ink-hover);
+    border-color: var(--ink-hover);
+}
+
+/* Tombol Lebar Penuh (Full Width) */
+.b.w {
+    width: 100%;
+    padding: 11px;
+}
+
+/* Gaya Focus untuk Aksesibilitas */
+:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+}
+
+/* Gaya Formulir (Input, Select, Label) */
+.f {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: var(--mu);
+    font-weight: 500;
+}
+
+.f input,
+.f select {
+    display: block;
+    width: 95%;
+    margin-top: 15px;
+    padding: 9px 11px;
+    border: 1px solid var(--ln);
+    border-radius: 9px;
+    background: var(--sf);
+    color: var(--tx);
+    font: inherit; /* Mengambil font-family utama */
+}
+
+/* Gaya khusus Placeholder agar tidak terlalu redup/gelap */
+.f input::placeholder {
+    color: var(--mu);
+    opacity: 0.7;
+}

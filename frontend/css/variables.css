@@ -1,0 +1,24 @@
+/* frontend/css/variables.css */
+
+:root {
+    --bg: #0b1a2b;
+    --sf: #102a43;
+    --ln: #243b53;
+    --tx: #e6f0fd;
+    --mu: #9fb3c8;
+    --ink: #4c9aff;
+    --ink-hover: #2684ff;
+    --grad: linear-gradient(135deg, #0052cc 0%, #0093e9 100%);
+    --hat: #16365a;
+    --on: #06223f;
+    color-scheme: dark;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.loader {
+  animation: fadeIn 0.7s ease-in-out;
+}

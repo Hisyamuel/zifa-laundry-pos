@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Riwayat Transaksi (Owner) - Zifa Laundry</title>
+    <!-- Memuat CSS utama dan komponen -->
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link rel="stylesheet" href="/frontend/css/component.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="shell">
+        <!-- Sidebar Menu -->
+        <nav class="side">
+            <div class="logo"><i>Z</i>Zifa Laundry</div>
+
+            <a href="/frontend/pages/owner/dashboard.html" class="menu-link">Dashboard</a>
+            <a href="/frontend/pages/owner/layanan.html" class="menu-link">Layanan & Tarif</a>
+            <a href="/frontend/pages/owner/pegawai.html" class="menu-link">Akun Pegawai (2)</a>
+            <a href="/frontend/pages/owner/laporan.html" class="menu-link">Laporan Keuangan</a>
+            <a href="/frontend/pages/owner/riwayat.html" class="menu-link on">Riwayat Transaksi</a>
+
+            <a href="/frontend/pages/auth/auth.html" class="menu-link logout-btn">Keluar</a>
+
+            <div class="who">
+                Owner · Pemilik usaha
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main loader">
+            <!-- Header -->
+            <div class="hd">
+                <div>
+                    <h1>Riwayat Transaksi</h1>
+                    <p>Cari pesanan berdasarkan tanggal, nama pelanggan, atau nomor resi.</p>
+                </div>
+            </div>
+
+            <!-- Card Utama berisi Filter & Tabel -->
+            <div class="card">
+
+                <!-- Filter Bar -->
+                <div class="bar">
+                    <!-- Flex 2 agar input teks lebih panjang dari yang lain -->
+                    <input type="text" placeholder="Cari nama pelanggan atau nomor resi"
+                        style="flex: 2; min-width: 200px;">
+                    <input type="date" style="flex: 1; min-width: 130px;">
+                    <select style="flex: 1; min-width: 130px;">
+                        <option>Semua status</option>
+                        <option>Dicuci</option>
+                        <option>Dikeringkan</option>
+                        <option>Disetrika</option>
+                        <option>Siap Ambil</option>
+                        <option>Selesai</option>
+                    </select>
+                    <button class="b p">Terapkan</button>
+                </div>
+
+                <!-- Table Container -->
+                <div class="tw" style="margin-top: 20px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No. resi</th>
+                                <th>Waktu</th>
+                                <th>Pelanggan</th>
+                                <th>Layanan</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Bayar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ZL-0412</td>
+                                <td>04 Okt 2026 · 09:12</td>
+                                <td>Siti Aulia</td>
+                                <td>Cuci + Setrika · 3 kg</td>
+                                <td><span class="bd">Dicuci</span></td>
+                                <td>Rp 24.000</td>
+                                <td>Tunai</td>
+                            </tr>
+                            <tr>
+                                <td>ZL-0411</td>
+                                <td>04 Okt 2026 · 09:40</td>
+                                <td>Budi Santoso</td>
+                                <td>Bedcover · 1 pcs</td>
+                                <td><span class="bd">Disetrika</span></td>
+                                <td>Rp 25.000</td>
+                                <td>QRIS</td>
+                            </tr>
+                            <tr>
+                                <td>ZL-0410</td>
+                                <td>04 Okt 2026 · 10:05</td>
+                                <td>Rina Marlina</td>
+                                <td>Cuci Kering · 5 kg</td>
+                                <td><span class="bd o">Siap Ambil</span></td>
+                                <td>Rp 30.000</td>
+                                <td>Transfer</td>
+                            </tr>
+                            <tr>
+                                <td>ZL-0409</td>
+                                <td>04 Okt 2026 · 10:30</td>
+                                <td>Dedi Kurnia</td>
+                                <td>Jas · 2 pcs</td>
+                                <td><span class="bd k">Selesai</span></td>
+                                <td>Rp 60.000</td>
+                                <td>Tunai</td>
+                            </tr>
+                            <tr>
+                                <td>ZL-0408</td>
+                                <td>04 Okt 2026 · 11:15</td>
+                                <td>Maya Putri</td>
+                                <td>Cuci + Setrika · 4 kg</td>
+                                <td><span class="bd k">Selesai</span></td>
+                                <td>Rp 32.000</td>
+                                <td>QRIS</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

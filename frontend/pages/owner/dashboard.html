@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Dashboard (Owner) - Zifa Laundry</title>
+    <!-- Pastikan file CSS eksternal ini sudah disalin (lihat bagian CSS di bawah) -->
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link rel="stylesheet" href="/frontend/css/component.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="shell">
+        <!-- Sidebar Menu -->
+         <nav class="side">
+            <div class="logo"><i>Z</i>Zifa Laundry</div>
+
+            <a href="/frontend/pages/owner/dashboard.html" class="menu-link on">Dashboard</a>
+            <a href="/frontend/pages/owner/layanan.html" class="menu-link">Layanan & Tarif</a>
+            <a href="/frontend/pages/owner/pegawai.html" class="menu-link">Akun Pegawai (2)</a>
+            <a href="/frontend/pages/owner/laporan.html" class="menu-link">Laporan Keuangan</a>
+            <a href="/frontend/pages/owner/riwayat.html" class="menu-link">Riwayat Transaksi</a>
+
+            <!-- Tombol Keluar didempetkan di bawah nav -->
+            <a href="/frontend/pages/auth/auth.html" class="menu-link logout-btn">Keluar</a>
+
+            <div class="who">
+                Owner · Pemilik usaha
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main loader">
+            <!-- Header -->
+            <div class="hd">
+                <div>
+                    <h1>Dashboard</h1>
+                    <p>Ringkasan performa keuangan Zifa Laundry.</p>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="grid g4">
+                <div class="card st">
+                    <small>Pendapatan hari ini</small>
+                    <b>Rp 1.250.000</b>
+                    <em>dari 28 transaksi</em>
+                </div>
+                <div class="card st">
+                    <small>Pesanan masuk</small>
+                    <b>28</b>
+                    <em>hari ini</em>
+                </div>
+                <div class="card st">
+                    <small>Dalam proses</small>
+                    <b>17</b>
+                    <em>dicuci hingga disetrika</em>
+                </div>
+                <div class="card st">
+                    <small>Siap diambil</small>
+                    <b>6</b>
+                    <em>menunggu pelanggan</em>
+                </div>
+            </div>
+
+            <!-- Charts & Tables Row -->
+            <div class="grid g2">
+                <!-- Bar Chart -->
+                <div class="card">
+                    <h3>Pendapatan 7 hari terakhir</h3>
+                    <div class="bars">
+                        <div><i style="height:40%"></i>Sen</div>
+                        <div><i style="height:65%"></i>Sel</div>
+                        <div><i style="height:50%"></i>Rab</div>
+                        <div><i style="height:80%"></i>Kam</div>
+                        <div><i style="height:60%"></i>Jum</div>
+                        <div><i style="height:90%"></i>Sab</div>
+                        <div><i style="height:72%"></i>Min</div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions Table -->
+                <div class="card">
+                    <h3>Transaksi terbaru</h3>
+                    <div class="tw">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Resi</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ZL-0412 · Siti Aulia</td>
+                                    <td>Rp 24.000</td>
+                                </tr>
+                                <tr>
+                                    <td>ZL-0411 · Budi Santoso</td>
+                                    <td>Rp 25.000</td>
+                                </tr>
+                                <tr>
+                                    <td>ZL-0410 · Rina Marlina</td>
+                                    <td>Rp 30.000</td>
+                                </tr>
+                                <tr>
+                                    <td>ZL-0409 · Dedi Kurnia</td>
+                                    <td>Rp 60.000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

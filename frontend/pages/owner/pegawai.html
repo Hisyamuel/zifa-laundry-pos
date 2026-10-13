@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Akun Pegawai (Owner) - Zifa Laundry</title>
+    <!-- Memuat CSS utama dan komponen -->
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link rel="stylesheet" href="/frontend/css/component.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="shell">
+        <!-- Sidebar Menu -->
+        <nav class="side">
+            <div class="logo"><i>Z</i>Zifa Laundry</div>
+
+            <a href="/frontend/pages/owner/dashboard.html" class="menu-link">Dashboard</a>
+            <a href="/frontend/pages/owner/layanan.html" class="menu-link">Layanan & Tarif</a>
+            <a href="/frontend/pages/owner/pegawai.html" class="menu-link on">Akun Pegawai (2)</a>
+            <a href="/frontend/pages/owner/laporan.html" class="menu-link">Laporan Keuangan</a>
+            <a href="/frontend/pages/owner/riwayat.html" class="menu-link">Riwayat Transaksi</a>
+
+            <!-- Tombol Keluar didempetkan di bawah nav -->
+            <a href="/frontend/pages/auth/auth.html" class="menu-link logout-btn">Keluar</a>
+
+            <div class="who">
+                Owner · Pemilik usaha
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main loader">
+            <!-- Header (Tanpa tombol Tambah Layanan) -->
+            <div class="hd">
+                <div>
+                    <h1>Akun Pegawai</h1>
+                    <p>Setujui pendaftaran Employee dan kelola akun pegawai.</p>
+                </div>
+            </div>
+
+            <!-- Tabel Menunggu Persetujuan -->
+            <div class="card" style="margin-bottom: 24px;">
+                <!-- Menggunakan badge .bd.o untuk angka 2 -->
+                <h3>Menunggu persetujuan <span class="bd o" style="margin-left: 8px;">2</span></h3>
+                <div class="tw">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Tanggal daftar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dewi Lestari</td>
+                                <td>dewi@email.com</td>
+                                <td>09 Okt 2026</td>
+                                <td>
+                                    <!-- Padding disesuaikan dengan proporsi tombol aksi di dalam tabel -->
+                                    <button class="b p" style="padding: 8px 12px; margin-right: 4px;">Setujui</button>
+                                    <button class="b" style="padding: 8px 12px;">Tolak</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Fajar Nugroho</td>
+                                <td>fajar@email.com</td>
+                                <td>10 Okt 2026</td>
+                                <td>
+                                    <button class="b p" style="padding: 8px 12px; margin-right: 4px;">Setujui</button>
+                                    <button class="b" style="padding: 8px 12px;">Tolak</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tabel Daftar Pegawai Aktif/Nonaktif -->
+            <div class="card">
+                <h3>Daftar pegawai</h3>
+                <div class="tw">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Ani Wulandari</td>
+                                <td>ani@zifa.id</td>
+                                <td><span class="bd k">Aktif</span></td>
+                                <td style="color: var(--mu); cursor: pointer;">Ubah · Nonaktifkan</td>
+                            </tr>
+                            <tr>
+                                <td>Reza Pratama</td>
+                                <td>reza@zifa.id</td>
+                                <td><span class="bd k">Aktif</span></td>
+                                <td style="color: var(--mu); cursor: pointer;">Ubah · Nonaktifkan</td>
+                            </tr>
+                            <tr>
+                                <td>Lia Handayani</td>
+                                <td>lia@zifa.id</td>
+                                <td><span class="bd">Nonaktif</span></td>
+                                <td style="color: var(--mu); cursor: pointer;">Ubah · Aktifkan</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</body>
+
+</html>
