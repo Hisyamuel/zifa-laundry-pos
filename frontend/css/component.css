@@ -8,7 +8,8 @@
     padding: 8px 14px;
     font-weight: 600;
     cursor: pointer;
-    color: var(--tx); /* Pastikan warna teks mengikuti tema gelap */
+    color: var(--tx);
+    /* Pastikan warna teks mengikuti tema gelap */
 }
 
 /* Tombol Utama (Primary Button) - Warna Biru */
@@ -54,11 +55,108 @@
     border-radius: 9px;
     background: var(--sf);
     color: var(--tx);
-    font: inherit; /* Mengambil font-family utama */
+    font: inherit;
+    /* Mengambil font-family utama */
 }
 
 /* Gaya khusus Placeholder agar tidak terlalu redup/gelap */
 .f input::placeholder {
     color: var(--mu);
     opacity: 0.7;
+}
+
+.btn-link {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+/* --- TOAST NOTIFICATION --- */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    min-width: 300px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.success {
+    background-color: #10b981;
+}
+
+/* Hijau */
+.toast.error {
+    background-color: #ef4444;
+}
+
+/* Merah */
+
+/* --- CUSTOM MODAL --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(15, 23, 42, 0.7);
+    /* Menyesuaikan tema gelap Zifa */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.modal-content {
+    background-color: #1e293b;
+    /* Warna card Zifa */
+    border: 1px solid #334155;
+    padding: 24px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    color: #f8fafc;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.modal-content p {
+    margin-bottom: 24px;
+    color: #cbd5e1;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
 }

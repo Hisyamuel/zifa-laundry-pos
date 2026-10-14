@@ -58,75 +58,61 @@
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Cuci Kering Lipat</td>
-                                    <td>Kiloan</td>
-                                    <td>Rp 6.000 / kg</td>
-                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
-                                </tr>
-                                <tr>
-                                    <td>Cuci + Setrika</td>
-                                    <td>Kiloan</td>
-                                    <td>Rp 8.000 / kg</td>
-                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
-                                </tr>
-                                <tr>
-                                    <td>Setrika Saja</td>
-                                    <td>Kiloan</td>
-                                    <td>Rp 5.000 / kg</td>
-                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
-                                </tr>
-                                <tr>
-                                    <td>Bedcover</td>
-                                    <td>Satuan</td>
-                                    <td>Rp 25.000 / pcs</td>
-                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
-                                </tr>
-                                <tr>
-                                    <td>Jas</td>
-                                    <td>Satuan</td>
-                                    <td>Rp 30.000 / pcs</td>
-                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
-                                </tr>
-                                <tr>
-                                    <td>Sepatu</td>
-                                    <td>Satuan</td>
-                                    <td>Rp 35.000 / pasang</td>
-                                    <td style="color: var(--mu); cursor: pointer;">Ubah · Hapus</td>
-                                </tr>
+                            <tbody id="table-layanan-body">
+                                <!-- Data akan di-render dari layanan.js -->
                             </tbody>
                         </table>
                     </div>
                 </div>
 
                 <!-- Form Tambah Layanan (Kanan) -->
-                <div class="card">
-                    <h3>Tambah layanan</h3>
+                <form id="form-layanan" class="card">
+                    <!-- Hidden input untuk menyimpan ID saat mode Edit -->
+                    <input type="hidden" id="service-id-hidden">
 
                     <label class="f">
                         Nama layanan
-                        <input type="text" placeholder="mis. Cuci Kering Lipat">
+                        <input type="text" id="input-nama" placeholder="mis. Cuci Kering Lipat" required>
                     </label>
 
                     <label class="f">
                         Tipe
-                        <select>
-                            <option>Kiloan</option>
-                            <option>Satuan</option>
+                        <select id="select-tipe" required>
+                            <option value="Kiloan">Kiloan</option>
+                            <option value="Satuan">Satuan</option>
                         </select>
                     </label>
 
                     <label class="f">
                         Tarif (Rp)
-                        <input type="number" placeholder="0">
+                        <input type="number" id="input-tarif" placeholder="0" required min="0">
                     </label>
 
-                    <button class="b p" style="margin-top: 12px;">Simpan layanan</button>
-                </div>
+                    <!-- Tombol Simpan -->
+                    <button type="submit" id="btn-submit-layanan" class="b p w" style="margin-top: 10px;">Simpan layanan</button>
+                    
+                    <!-- Tombol Batal Edit (Tersembunyi secara default) -->
+                    <button type="button" id="btn-cancel-edit" class="b w" style="margin-top: 10px; display: none;">Batal Edit</button>
+                </form>
             </div>
         </main>
     </div>
+
+    <!-- Wadah untuk Toast Notification -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Custom Modal Konfirmasi Hapus -->
+    <div id="delete-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3>Konfirmasi Hapus</h3>
+            <p>Apakah Anda yakin ingin menghapus layanan <strong id="delete-service-name"></strong>?</p>
+            <div class="modal-actions">
+                <button id="btn-cancel-delete" class="b w">Batal</button>
+                <button id="btn-confirm-delete" class="b w" style="background-color: #ef4444; color: white;">Hapus</button>
+            </div>
+        </div>
+    </div>
+    <script src="/frontend/js/pages/owner/layanan.js"></script>
 </body>
 
 </html>

@@ -265,6 +265,7 @@ tr:last-child td {
     align-items: flex-end;
     gap: 10px;
     height: 150px;
+    margin-top: 50px;
 }
 
 .bars div {

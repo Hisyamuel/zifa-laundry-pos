@@ -1,18 +1,23 @@
 require('dotenv').config();
+
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors'); 
 const path = require('path');
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const serviceRoutes = require('./routes/serviceRoutes'); 
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
 
-app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
+app.use('/frontend', express.static(path.join(__dirname, '../frontend')));
 
-module.exports = app;
+// Memasang rute pada jalur /api/
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/services', serviceRoutes);
 
-if (require.main === module) {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`Server berjalan di http://localhost:${PORT}`));
-}
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
