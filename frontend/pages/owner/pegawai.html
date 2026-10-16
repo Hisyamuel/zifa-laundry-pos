@@ -21,7 +21,7 @@
 
             <a href="/frontend/pages/owner/dashboard.html" class="menu-link">Dashboard</a>
             <a href="/frontend/pages/owner/layanan.html" class="menu-link">Layanan & Tarif</a>
-            <a href="/frontend/pages/owner/pegawai.html" class="menu-link on">Akun Pegawai (2)</a>
+            <a href="/frontend/pages/owner/pegawai.html" class="menu-link on">Akun Pegawai</a>
             <a href="/frontend/pages/owner/laporan.html" class="menu-link">Laporan Keuangan</a>
             <a href="/frontend/pages/owner/riwayat.html" class="menu-link">Riwayat Transaksi</a>
 
@@ -35,7 +35,6 @@
 
         <!-- Main Content Area -->
         <main class="main loader">
-            <!-- Header (Tanpa tombol Tambah Layanan) -->
             <div class="hd">
                 <div>
                     <h1>Akun Pegawai</h1>
@@ -43,10 +42,9 @@
                 </div>
             </div>
 
-            <!-- Tabel Menunggu Persetujuan -->
-            <div class="card" style="margin-bottom: 24px;">
-                <!-- Menggunakan badge .bd.o untuk angka 2 -->
-                <h3>Menunggu persetujuan <span class="bd o" style="margin-left: 8px;">2</span></h3>
+            <!-- Bagian Menunggu Persetujuan -->
+            <div class="card" style="margin-bottom: 20px;" id="pending-section">
+                <h3>Menunggu persetujuan <span class="badge" id="pending-badge-count">0</span></h3>
                 <div class="tw">
                     <table>
                         <thead>
@@ -57,32 +55,14 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Dewi Lestari</td>
-                                <td>dewi@email.com</td>
-                                <td>09 Okt 2026</td>
-                                <td>
-                                    <!-- Padding disesuaikan dengan proporsi tombol aksi di dalam tabel -->
-                                    <button class="b p" style="padding: 8px 12px; margin-right: 4px;">Setujui</button>
-                                    <button class="b" style="padding: 8px 12px;">Tolak</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Fajar Nugroho</td>
-                                <td>fajar@email.com</td>
-                                <td>10 Okt 2026</td>
-                                <td>
-                                    <button class="b p" style="padding: 8px 12px; margin-right: 4px;">Setujui</button>
-                                    <button class="b" style="padding: 8px 12px;">Tolak</button>
-                                </td>
-                            </tr>
+                        <tbody id="table-pending-body">
+                            <!-- Data akan dirender oleh pegawai.js -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Tabel Daftar Pegawai Aktif/Nonaktif -->
+            <!-- Bagian Daftar Pegawai Aktif/Nonaktif -->
             <div class="card">
                 <h3>Daftar pegawai</h3>
                 <div class="tw">
@@ -95,32 +75,31 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Ani Wulandari</td>
-                                <td>ani@zifa.id</td>
-                                <td><span class="bd k">Aktif</span></td>
-                                <td style="color: var(--mu); cursor: pointer;">Ubah · Nonaktifkan</td>
-                            </tr>
-                            <tr>
-                                <td>Reza Pratama</td>
-                                <td>reza@zifa.id</td>
-                                <td><span class="bd k">Aktif</span></td>
-                                <td style="color: var(--mu); cursor: pointer;">Ubah · Nonaktifkan</td>
-                            </tr>
-                            <tr>
-                                <td>Lia Handayani</td>
-                                <td>lia@zifa.id</td>
-                                <td><span class="bd">Nonaktif</span></td>
-                                <td style="color: var(--mu); cursor: pointer;">Ubah · Aktifkan</td>
-                            </tr>
+                        <tbody id="table-employee-body">
+                            <!-- Data akan dirender oleh pegawai.js -->
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </main>
     </div>
+
+    <!-- Elemen Modal dan Toast (Taruh di atas tag </body>) -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Modal Konfirmasi Toggle Status -->
+    <div id="status-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3 id="modal-title">Ubah Status Akun</h3>
+            <p id="modal-desc">Apakah Anda yakin ingin mengubah status pegawai ini?</p>
+            <div class="modal-actions">
+                <button id="btn-cancel-modal" class="b w">Batal</button>
+                <button id="btn-confirm-modal" class="b p w">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/frontend/js/pages/owner/pegawai.js"></script>
 </body>
 
 </html>
