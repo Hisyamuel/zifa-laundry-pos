@@ -48,51 +48,56 @@
             <!-- Filter Bar: Segmen & Date Picker -->
             <div class="bar" style="margin-bottom: 24px;">
                 <div class="seg m" id="tab-filter">
-                    <button data-period="harian">Harian</button>
-                    <button class="on" data-period="mingguan">Mingguan</button>
+                    <!-- Elemen slider virtual untuk animasi -->
+                    <div class="slider-indicator" id="slider-indicator"></div>
+                    <button class="on" data-period="harian">Harian</button>
+                    <button data-period="mingguan">Mingguan</button>
                     <button data-period="bulanan">Bulanan</button>
                 </div>
                 <input type="date" id="date-picker">
             </div>
 
-            <!-- Stats Row (Horisontal) -->
-            <div class="grid g3">
-                <div class="card st">
-                    <small>Total pendapatan</small>
-                    <b id="val-total">Rp 8.740.000</b>
-                    <em id="val-date-1">28 Sep - 04 Okt 2026</em>
+            <!-- BUNGKUSAN KONTEN UNTUK ANIMASI FADE -->
+            <div id="report-content" class="fade-transition">
+                <!-- Stats Row (Horisontal) -->
+                <div class="grid g3">
+                    <div class="card st">
+                        <small>Total pendapatan</small>
+                        <b id="val-total">Rp 0</b>
+                        <em id="val-date-1">-</em>
+                    </div>
+                    <div class="card st">
+                        <small>Jumlah transaksi</small>
+                        <b id="val-count">0</b>
+                        <em id="val-date-2">-</em>
+                    </div>
+                    <div class="card st">
+                        <small>Rata-rata per transaksi</small>
+                        <b id="val-avg">Rp 0</b>
+                        <em id="val-date-3">-</em>
+                    </div>
                 </div>
-                <div class="card st">
-                    <small>Jumlah transaksi</small>
-                    <b id="val-count">196</b>
-                    <em id="val-date-2">28 Sep - 04 Okt 2026</em>
-                </div>
-                <div class="card st">
-                    <small>Rata-rata per transaksi</small>
-                    <b id="val-avg">Rp 44.600</b>
-                    <em id="val-date-3">28 Sep - 04 Okt 2026</em>
+
+                <!-- Rincian Transaksi Table -->
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;">Rincian transaksi</h3>
+                    <div class="tw">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th id="th-label">Tanggal</th>
+                                    <th>Jumlah transaksi</th>
+                                    <th>Pendapatan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                <!-- Data akan dirender lewat JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- Rincian Transaksi Table -->
-            <div class="card">
-                <h3 style="margin-bottom: 16px;">Rincian transaksi</h3>
-                <div class="tw">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th id="th-label">Tanggal</th>
-                                <th>Jumlah transaksi</th>
-                                <th>Pendapatan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
-                            <!-- Data Dummy akan dirender lewat JS di bawah -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
         </main>
     </div>
 

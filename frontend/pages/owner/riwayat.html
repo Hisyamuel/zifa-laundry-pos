@@ -47,19 +47,17 @@
 
                 <!-- Filter Bar -->
                 <div class="bar">
-                    <!-- Flex 2 agar input teks lebih panjang dari yang lain -->
-                    <input type="text" placeholder="Cari nama pelanggan atau nomor resi"
-                        style="flex: 2; min-width: 200px;">
-                    <input type="date" style="flex: 1; min-width: 130px;">
-                    <select style="flex: 1; min-width: 130px;">
-                        <option>Semua status</option>
-                        <option>Dicuci</option>
-                        <option>Dikeringkan</option>
-                        <option>Disetrika</option>
-                        <option>Siap Ambil</option>
-                        <option>Selesai</option>
+                    <input type="text" id="input-search" placeholder="Cari nama pelanggan atau nomor resi" style="width: 300px;">
+                    <input type="date" id="input-date">
+                    <select id="select-status">
+                        <option value="Semua status">Semua status</option>
+                        <option value="Dicuci">Dicuci</option>
+                        <option value="Dikeringkan">Dikeringkan</option>
+                        <option value="Disetrika">Disetrika</option>
+                        <option value="Siap Ambil">Siap Ambil</option>
+                        <option value="Selesai">Selesai</option>
                     </select>
-                    <button class="b p">Terapkan</button>
+                    <button class="b p" id="btn-terapkan">Terapkan</button>
                 </div>
 
                 <!-- Table Container -->
@@ -76,52 +74,8 @@
                                 <th>Bayar</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>ZL-0412</td>
-                                <td>04 Okt 2026 · 09:12</td>
-                                <td>Siti Aulia</td>
-                                <td>Cuci + Setrika · 3 kg</td>
-                                <td><span class="bd">Dicuci</span></td>
-                                <td>Rp 24.000</td>
-                                <td>Tunai</td>
-                            </tr>
-                            <tr>
-                                <td>ZL-0411</td>
-                                <td>04 Okt 2026 · 09:40</td>
-                                <td>Budi Santoso</td>
-                                <td>Bedcover · 1 pcs</td>
-                                <td><span class="bd">Disetrika</span></td>
-                                <td>Rp 25.000</td>
-                                <td>QRIS</td>
-                            </tr>
-                            <tr>
-                                <td>ZL-0410</td>
-                                <td>04 Okt 2026 · 10:05</td>
-                                <td>Rina Marlina</td>
-                                <td>Cuci Kering · 5 kg</td>
-                                <td><span class="bd o">Siap Ambil</span></td>
-                                <td>Rp 30.000</td>
-                                <td>Transfer</td>
-                            </tr>
-                            <tr>
-                                <td>ZL-0409</td>
-                                <td>04 Okt 2026 · 10:30</td>
-                                <td>Dedi Kurnia</td>
-                                <td>Jas · 2 pcs</td>
-                                <td><span class="bd k">Selesai</span></td>
-                                <td>Rp 60.000</td>
-                                <td>Tunai</td>
-                            </tr>
-                            <tr>
-                                <td>ZL-0408</td>
-                                <td>04 Okt 2026 · 11:15</td>
-                                <td>Maya Putri</td>
-                                <td>Cuci + Setrika · 4 kg</td>
-                                <td><span class="bd k">Selesai</span></td>
-                                <td>Rp 32.000</td>
-                                <td>QRIS</td>
-                            </tr>
+                        <tbody id="table-riwayat-body">
+                            <!-- Data dirender lewat JS -->
                         </tbody>
                     </table>
                 </div>
@@ -129,6 +83,8 @@
             </div>
         </main>
     </div>
+    
+    <script src="/frontend/js/riwayat-global.js"></script>
 </body>
 
 </html>

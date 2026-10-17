@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-confirm-modal').addEventListener('click', executeStatusChange);
 });
 
-// --- SISTEM TOAST --- (Gunakan CSS yang sama dengan halaman layanan)
+// --- SISTEM TOAST --- 
 function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -66,6 +66,10 @@ function renderPendingTable(employees) {
     const section = document.getElementById('pending-section');
 
     tbody.innerHTML = '';
+    if (employees.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Belum ada data pegawai.</td></tr>';
+        return;
+    }
     badge.textContent = employees.length;
 
     // Sembunyikan bagian pending jika tidak ada data
@@ -94,6 +98,10 @@ function renderPendingTable(employees) {
 function renderEmployeeTable(employees) {
     const tbody = document.getElementById('table-employee-body');
     tbody.innerHTML = '';
+    if (employees.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Belum ada data pegawai.</td></tr>';
+        return;
+    }
 
     employees.forEach(emp => {
         // Tentukan styling badge status

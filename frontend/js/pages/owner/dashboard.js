@@ -75,9 +75,12 @@ function renderChart(chartData) {
  */
 function renderRecentTransactions(transactions) {
     const tbody = document.querySelector('.tw tbody');
-    if (!tbody) return;
 
     tbody.innerHTML = ''; // Kosongkan elemen statis bawaan HTML
+    if (transactions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Tidak ada transaksi ditemukan.</td></tr>';
+        return;
+    }
 
     transactions.forEach(trx => {
         const tr = document.createElement('tr');

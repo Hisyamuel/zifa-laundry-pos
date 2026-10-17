@@ -1,38 +1,76 @@
 // frontend/js/pages/owner/laporan.js
 
-let currentPeriod = 'mingguan';
+let currentPeriod = 'harian';
 let currentDate = ''; // Format YYYY-MM-DD, kosong = hari ini
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Inisialisasi
+    // 1. Inisialisasi awal
     fetchReportData();
 
-    // Event Listener Filter Tab (Harian, Mingguan, Bulanan)
+    // Pastikan slider terposisi setelah layout browser stabil (render awal)
+    requestAnimationFrame(() => updateSlider());
+    window.addEventListener('resize', updateSlider); // Jaga-jaga jika ukuran layar diubah
+
+    // 2. Event Listener Filter Tab (Harian, Mingguan, Bulanan)
     const tabs = document.querySelectorAll('#tab-filter button');
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
+            // Abaikan jika menekan tab yang sudah aktif
+            if (this.classList.contains('on')) return;
+
+            // Pindahkan class 'on'
             tabs.forEach(t => t.classList.remove('on'));
             this.classList.add('on');
 
             currentPeriod = this.getAttribute('data-period');
-            fetchReportData();
+
+            updateSlider();          // Jalankan animasi pergeseran tab
+            loadDataWithAnimation(); // Jalankan animasi fade & muat data baru
         });
     });
 
-    // Event Listener Date Picker
+    // 3. Event Listener Date Picker
     const datePicker = document.getElementById('date-picker');
-    // Set default value ke hari ini
-    datePicker.valueAsDate = new Date();
+    datePicker.valueAsDate = new Date(); // Set default ke hari ini
 
     datePicker.addEventListener('change', function () {
         currentDate = this.value; // YYYY-MM-DD
-        fetchReportData();
+        loadDataWithAnimation();  // Jalankan animasi fade & muat data baru
     });
 
-    // Event Listener Tombol Unduh Laporan
+    // 4. Event Listener Tombol Unduh Laporan
     document.getElementById('btn-unduh').addEventListener('click', downloadCSV);
 });
 
+// --- FUNGSI ANIMASI SLIDER ---
+function updateSlider() {
+    const activeBtn = document.querySelector('#tab-filter button.on');
+    const slider = document.getElementById('slider-indicator');
+    if (activeBtn && slider) {
+        // Samakan lebar slider dengan tombol yang aktif
+        slider.style.width = activeBtn.offsetWidth + 'px';
+        // Geser slider sesuai dengan kordinat tombol yang aktif (X-axis)
+        slider.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+    }
+}
+
+// --- FUNGSI ANIMASI FADE (MUAT DATA) ---
+function loadDataWithAnimation() {
+    const content = document.getElementById('report-content');
+
+    // Langkah 1: Fade Out (Sembunyikan konten secara halus)
+    content.classList.add('hidden');
+
+    // Langkah 2: Tunggu 300ms (Sesuai durasi CSS transition), lalu muat data
+    setTimeout(async () => {
+        await fetchReportData(); // Panggil data dari backend
+
+        // Langkah 3: Fade In (Tampilkan kembali konten secara halus)
+        content.classList.remove('hidden');
+    }, 100);
+}
+
+// --- FUNGSI UTAMA FETCH ---
 async function fetchReportData() {
     try {
         let url = `http://localhost:3000/api/reports?period=${currentPeriod}`;
@@ -41,13 +79,13 @@ async function fetchReportData() {
         }
 
         const response = await fetch(url);
-        
-        // Cek dulu apakah responsnya sukses (200 OK) sebelum diubah ke JSON
+
+        // Cek dulu apakah responsnya sukses (200 OK)
         if (!response.ok) {
             throw new Error(`Endpoint tidak ditemukan! Status: ${response.status}`);
         }
 
-        // Jika aman, baru jadikan JSON
+        // Jika aman, render
         const result = await response.json();
         renderDashboard(result.data);
 
@@ -67,17 +105,17 @@ function formatRupiah(angka) {
 function renderDashboard(data) {
     const { summary, tableData } = data;
 
-    // 1. Update Metrik Utama
+    // Update Metrik
     document.getElementById('val-total').innerText = formatRupiah(summary.totalRevenue);
     document.getElementById('val-count').innerText = summary.transactionCount;
     document.getElementById('val-avg').innerText = formatRupiah(summary.averagePerTransaction);
 
-    // 2. Update Label Tanggal
+    // Update Label Tanggal
     document.getElementById('val-date-1').innerText = summary.displayDateRange;
     document.getElementById('val-date-2').innerText = summary.displayDateRange;
     document.getElementById('val-date-3').innerText = summary.displayDateRange;
 
-    // 3. Update Tombol Unduh & Header Tabel
+    // Update Header Tabel & Tombol
     const btnUnduh = document.getElementById('btn-unduh');
     const thLabel = document.getElementById('th-label');
 
@@ -92,7 +130,7 @@ function renderDashboard(data) {
         thLabel.innerText = 'Minggu Ke-';
     }
 
-    // 4. Render Isi Tabel
+    // Render Isi Tabel
     const tbody = document.getElementById('table-body');
     tbody.innerHTML = "";
 
@@ -107,44 +145,53 @@ function renderDashboard(data) {
     });
 }
 
-// --- FUNGSI UNDUH (DOWNLOAD CSV) ---
-function downloadCSV() {
-    const tbody = document.getElementById('table-body');
-    const rows = tbody.querySelectorAll('tr');
+// --- FUNGSI UNDUH CSV ---
+async function downloadCSV() {
+    try {
+        let url = `http://localhost:3000/api/reports/export?period=${currentPeriod}`;
+        if (currentDate) {
+            url += `&date=${currentDate}`;
+        }
 
-    if (rows.length === 0) {
-        alert("Tidak ada data untuk diunduh.");
-        return;
+        const btnUnduh = document.getElementById('btn-unduh');
+        const originalText = btnUnduh.innerText;
+        btnUnduh.innerText = "Mengunduh...";
+        btnUnduh.disabled = true;
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const blob = await response.blob();
+
+        const contentDisposition = response.headers.get('Content-Disposition');
+        let filename = 'Laporan.csv';
+        if (contentDisposition && contentDisposition.includes('filename=')) {
+            filename = contentDisposition.split('filename=')[1].split(';')[0];
+        }
+
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = filename;
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+
+        btnUnduh.innerText = originalText;
+        btnUnduh.disabled = false;
+
+    } catch (error) {
+        console.error('Gagal mengunduh CSV:', error);
+        alert("Gagal mengunduh laporan. Periksa koneksi server.");
+
+        const btnUnduh = document.getElementById('btn-unduh');
+        btnUnduh.innerText = `Unduh laporan ${currentPeriod}`;
+        btnUnduh.disabled = false;
     }
-
-    const thLabelText = document.getElementById('th-label').innerText;
-
-    // Header CSV
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += `${thLabelText},Jumlah Transaksi,Pendapatan\n`;
-
-    // Isi CSV
-    rows.forEach(row => {
-        const cols = row.querySelectorAll('td');
-        // Bersihkan teks dari titik/koma format uang agar bisa dijumlah di Excel
-        const col1 = cols[0].innerText;
-        const col2 = cols[1].innerText;
-        // Hapus 'Rp', titik, spasi untuk nilai uang
-        const col3 = cols[2].innerText.replace(/[^0-9]/g, '');
-
-        csvContent += `"${col1}","${col2}","${col3}"\n`;
-    });
-
-    // Proses Download
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-
-    // Nama file dinamis
-    const dateRangeStr = document.getElementById('val-date-1').innerText.replace(/\s/g, '_');
-    link.setAttribute("download", `Laporan_ZifaLaundry_${currentPeriod}_${dateRangeStr}.csv`);
-
-    document.body.appendChild(link); // Required for FF
-    link.click();
-    document.body.removeChild(link);
 }
