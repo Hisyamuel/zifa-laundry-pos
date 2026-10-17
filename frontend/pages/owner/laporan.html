@@ -52,7 +52,7 @@
                     <button class="on" data-period="mingguan">Mingguan</button>
                     <button data-period="bulanan">Bulanan</button>
                 </div>
-                <input type="date">
+                <input type="date" id="date-picker">
             </div>
 
             <!-- Stats Row (Horisontal) -->
@@ -96,95 +96,7 @@
         </main>
     </div>
 
-    <!-- Script Logika Dummy Filter -->
-    <script>
-        // Data Dummy untuk masing-masing periode
-        const dummyData = {
-            harian: {
-                total: "Rp 1.250.000", count: "28", avg: "Rp 44.600",
-                dateLabel: "04 Nov 2026",
-                thLabel: "Sesi Waktu",
-                btnLabel: "Unduh laporan harian",
-                table: [
-                    ["Pagi (08.00 - 12.00)", "10", "Rp 450.000"],
-                    ["Siang (12.00 - 16.00)", "12", "Rp 500.000"],
-                    ["Sore (16.00 - 20.00)", "6", "Rp 300.000"]
-                ]
-            },
-            mingguan: {
-                total: "Rp 10.880.000", count: "239", avg: "Rp 44.600",
-                dateLabel: "01 Nov - 07 Nov 2026",
-                thLabel: "Tanggal",
-                btnLabel: "Unduh laporan mingguan",
-                table: [
-                    ["07 Nov 2026", "50", "Rp 2.250.000"],
-                    ["06 Nov 2026", "45", "Rp 2.150.000"],
-                    ["05 Nov 2026", "30", "Rp 1.350.000"],
-                    ["04 Nov 2026", "28", "Rp 1.250.000"],
-                    ["03 Nov 2026", "31", "Rp 1.410.000"],
-                    ["02 Nov 2026", "26", "Rp 1.150.000"],
-                    ["01 Nov 2026", "29", "Rp 1.320.000"]
-                ]
-            },
-            bulanan: {
-                total: "Rp 35.600.000", count: "784", avg: "Rp 45.400",
-                dateLabel: "November 2026",
-                thLabel: "Minggu Ke-",
-                btnLabel: "Unduh laporan bulanan",
-                table: [
-                    ["1  (1 - 7 Nov)", "196", "Rp 8.740.000"],
-                    ["2  (8 - 14 Nov)", "180", "Rp 8.100.000"],
-                    ["3  (15 - 21 Nov)", "205", "Rp 9.500.000"],
-                    ["4  (22 - 28 Nov)", "203", "Rp 9.260.000"]
-                ]
-            }
-        };
-
-        // Fungsi Render Data ke DOM
-        function renderData(period) {
-            const data = dummyData[period];
-            
-            // Ubah Nilai Header & Metrik
-            document.getElementById('btn-unduh').innerText = data.btnLabel;
-            document.getElementById('val-total').innerText = data.total;
-            document.getElementById('val-count').innerText = data.count;
-            document.getElementById('val-avg').innerText = data.avg;
-            
-            // Ubah Label Tanggal di tiap kartu
-            document.getElementById('val-date-1').innerText = data.dateLabel;
-            document.getElementById('val-date-2').innerText = data.dateLabel;
-            document.getElementById('val-date-3').innerText = data.dateLabel;
-            
-            // Ubah Header Tabel
-            document.getElementById('th-label').innerText = data.thLabel;
-            
-            // Render ulang isi tabel
-            const tbody = document.getElementById('table-body');
-            tbody.innerHTML = "";
-            data.table.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td>`;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // Tangkap event klik pada tab
-        const tabs = document.querySelectorAll('#tab-filter button');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                // Hapus kelas 'on' dari semua tab, lalu tambahkan ke tab yang diklik
-                tabs.forEach(t => t.classList.remove('on'));
-                this.classList.add('on');
-                
-                // Render data sesuai atribut data-period
-                const period = this.getAttribute('data-period');
-                renderData(period);
-            });
-        });
-
-        // Eksekusi default saat halaman pertama kali dimuat (Mingguan)
-        renderData('mingguan');
-    </script>
+    <script src="/frontend/js/pages/owner/laporan.js"></script>
 </body>
 
 </html>
