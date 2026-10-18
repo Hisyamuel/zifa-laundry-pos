@@ -7,6 +7,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const authTitle = document.getElementById("auth-title");
     const authSubtitle = document.getElementById("auth-subtitle");
 
+    // Tambahan elemen untuk animasi
+    const formTrack = document.getElementById("form-track");
+    const formWrapper = document.querySelector(".form-slider-wrapper");
+
+    // Fungsi otomatis penyesuai tinggi form
+    const adjustHeight = (activeElement) => {
+        formWrapper.style.height = activeElement.scrollHeight + "px";
+    };
+
+    // Render awal saat web dibuka agar tinggi sesuai dengan form login
+    setTimeout(() => adjustHeight(formLogin), 50);
+
     // --- Fungsi Helper: Tampilkan/Sembunyikan Error Spesifik ---
     const showFieldError = (idTarget, message) => {
         const errElement = document.getElementById(idTarget);
@@ -36,6 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
         formLogin.classList.add("active");
         formRegister.classList.remove("active");
 
+        // Perintah animasi kembali ke sisi form Login (0%)
+        formTrack.style.transform = "translateX(0%)";
+        adjustHeight(formLogin);
+
         authTitle.textContent = "Masuk staf";
         authSubtitle.textContent = "Khusus Owner dan Employee.";
     });
@@ -50,6 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         formRegister.classList.add("active");
         formLogin.classList.remove("active");
+
+        // Perintah animasi bergeser separuh rel ke sisi form Register (-50%)
+        formTrack.style.transform = "translateX(-50%)";
+        adjustHeight(formRegister);
 
         authTitle.textContent = "Daftar akun";
         authSubtitle.innerHTML = "Khusus Employee. Akun aktif setelah disetujui<br>Owner.";
