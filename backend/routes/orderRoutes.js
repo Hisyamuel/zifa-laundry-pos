@@ -1,11 +1,13 @@
-// backend/routes/orderRoutes.js
+// backend/routes/orderRoutes.js (Versi Tanpa Middleware)
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
-// const requireRole = require('../middlewares/roleMiddleware'); // Opsional jika Anda sudah membuat middleware auth
 
-// GET /api/orders
-// Anda bisa menambahkan middleware di sini nanti: router.get('/', requireRole(['Owner', 'Employee']), orderController.getOrderHistory);
+// 1. Rute /layanan WAJIB ditaruh paling atas agar tidak tertimpa rute '/'
+router.get('/layanan', orderController.getLayanan);
+
+// 2. Rute utama /api/orders untuk GET riwayat & POST pesanan baru
 router.get('/', orderController.getOrderHistory);
+router.post('/', orderController.createOrder);
 
 module.exports = router;

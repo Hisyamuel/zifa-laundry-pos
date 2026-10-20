@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pesanan Baru (Employee) - Zifa Laundry</title>
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/component.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="shell">
+        <!-- Sidebar Kiri -->
+        <aside class="side">
+            <div class="logo">
+                <i>Z</i> Zifa Laundry
+            </div>
+            <a href="pesanan-baru.html" class="menu-link on">Pesanan Baru</a>
+            <a href="status-cucian.html" class="menu-link">Status Cucian</a>
+            <a href="riwayat.html" class="menu-link">Riwayat Transaksi</a>
+            
+            <a href="/frontend/pages/auth/auth.html" class="menu-link logout-btn">Keluar</a>
+
+            <div class="who">
+                Employee · Pegawai
+            </div>
+        </aside>
+
+        <!-- Konten Utama -->
+        <main class="main loader">
+            <header class="hd">
+                <div>
+                    <h1>Pesanan baru</h1>
+                    <p>Input pesanan, hitung otomatis, lalu cetak resi.</p>
+                </div>
+            </header>
+
+            <form id="form-pesanan" class="grid g2">
+                <!-- Kolom Kiri: Data Pesanan -->
+                <div class="card">
+                    <h3 style="border-bottom: 1px solid var(--ln); padding-bottom: 12px; margin-bottom: 20px;">Data pesanan</h3>
+
+                    <label class="f">
+                        Nama pelanggan
+                        <input type="text" id="pelanggan" name="pelanggan" placeholder="Cari atau tambah pelanggan" required>
+                    </label>
+
+                    <label class="f">
+                        No. telepon
+                        <input type="tel" id="no_hp" name="no_hp" placeholder="08xx xxxx xxxx" required>
+                    </label>
+
+                    <label class="f">
+                        Layanan
+                        <select id="layanan" name="layanan_id" required>
+                            <option value="" disabled selected>Memuat layanan...</option>
+                            <!-- Diisi dinamis oleh JavaScript -->
+                        </select>
+                    </label>
+
+                    <div class="f" style="flex-direction: row; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: 500;">Tipe hitung</span>
+                        <div class="seg" id="seg-tipe-hitung" style="margin-top: 0;">
+                            <div class="slider-indicator"></div>
+                            <button type="button" class="on" id="tipe-kilo" disabled>Kiloan</button>
+                            <button type="button" id="tipe-satuan" disabled>Satuan</button>
+                        </div>
+                    </div>
+
+                    <label class="f">
+                        Berat (kg) / jumlah (pcs)
+                        <input type="number" id="kuantitas" name="kuantitas" placeholder="0" min="0.1" step="0.1" required>
+                    </label>
+
+                    <label class="f">
+                        Catatan
+                        <input type="text" id="catatan" name="catatan" placeholder="mis. pisahkan pakaian putih">
+                    </label>
+                </div>
+
+                <!-- Kolom Kanan: Ringkasan -->
+                <div class="card">
+                    <h3 style="border-bottom: 1px solid var(--ln); padding-bottom: 12px; margin-bottom: 20px;">Ringkasan</h3>
+
+                    <div id="ringkasan-items" style="margin-bottom: 15px;">
+                        <div style="color: var(--mu); font-style: italic; font-size: 14px;">Belum ada layanan dipilih</div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; margin: 15px 0 25px; padding-top: 15px; border-top: 1px solid var(--ln);">
+                        <span>Total</span>
+                        <span id="total-biaya">Rp 0</span>
+                    </div>
+
+                    <div class="f" style="flex-direction: row; display: flex; align-items: center; justify-content: space-between;">
+                        <span style="font-weight: 500;">Metode bayar</span>
+                        <div class="seg" id="seg-metode-bayar" style="margin-top: 0;">
+                            <div class="slider-indicator"></div>
+                            <button type="button" class="on pay-btn" data-method="tunai">Tunai</button>
+                            <button type="button" class="pay-btn" data-method="transfer">Transfer</button>
+                            <button type="button" class="pay-btn" data-method="qris">QRIS</button>
+                        </div>
+                    </div>
+
+                    <!-- Elemen Pengganti Area Berarsir -->
+                    <div id="proof-area" style="display: none; margin-bottom: 16px;">
+                        <label class="f">
+                            No. Referensi / Nama Pengirim
+                            <input type="text" id="no_referensi" name="no_referensi" placeholder="mis. BCA a.n. Budi / ID QRIS">
+                        </label>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px;">
+                        <span style="color: var(--mu); font-weight: 500;">Status pembayaran</span>
+                        <span class="bd o" style="font-weight: normal; font-size: 12px; padding: 3px 12px; color: var(--mu);">Menunggu validasi</span>
+                    </div>
+
+                    <label class="f" id="input-uang-wrapper">
+                        Uang diterima (Rp)
+                        <input type="number" id="uang_diterima" name="uang_diterima" placeholder="0" min="0">
+                    </label>
+
+                    <button type="submit" class="b p w" id="btn-simpan-cetak" style="margin-top: 15px; margin-bottom: 10px;">Simpan & cetak resi</button>
+                    <button type="button" class="b w" id="btn-kirim-wa">Kirim resi digital</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- Hidden iframe for printing -->
+    <iframe id="print-frame" style="display:none;"></iframe>
+
+    <script src="/frontend/js/pages/employee/pesanan-baru.js"></script>
+</body>
+</html>

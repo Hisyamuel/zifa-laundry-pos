@@ -1,6 +1,6 @@
 // backend/controllers/orderController.js
 const { createClient } = require('@supabase/supabase-js');
-const dayjs = require('dayjs'); // Pastikan dayjs terinstal
+const dayjs = require('dayjs');
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
@@ -8,12 +8,9 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 // GET: Ambil riwayat transaksi dengan fitur filter
 const getOrderHistory = async (req, res) => {
-    // Ambil parameter filter dari query string
     const { search, date, status } = req.query;
 
     try {
-        // Mulai membangun query dasar
-        // Kita join dengan tabel customer dan mengambil atribut terkait
         let query = supabase
             .from('pesanan')
             .select(`
@@ -27,40 +24,26 @@ const getOrderHistory = async (req, res) => {
             `)
             .order('transaction_date', { ascending: false });
 
-        // 1. Terapkan Filter Pencarian (Nama Pelanggan atau Nomor Resi)
         if (search) {
-            // Karena kita mencari nama di dalam tabel relasi (customer), 
-            // query pencariannya sedikit kompleks di Supabase.
-            // Solusi sederhana: Cari resi OR cari nama pelanggan
             query = query.or(`resi_number.ilike.%${search}%, customer.name.ilike.%${search}%`);
         }
 
-        // 2. Terapkan Filter Tanggal
         if (date) {
-            // 'date' format YYYY-MM-DD. Kita ambil transaksi sepanjang hari tersebut.
             const startOfDay = dayjs(date).startOf('day').toISOString();
             const endOfDay = dayjs(date).endOf('day').toISOString();
             query = query.gte('transaction_date', startOfDay).lte('transaction_date', endOfDay);
         }
 
-        // 3. Terapkan Filter Status Cucian
         if (status && status !== 'Semua status') {
             query = query.eq('laundry_status', status);
         }
 
-        // Eksekusi query
         const { data, error } = await query;
-
         if (error) throw error;
 
-        // --- AMBIL DETAIL LAYANAN (Workaround untuk Supabase) ---
-        // Karena relasi pesanan ke layanan melewati tabel detail_transaksi,
-        // lebih mudah kita ambil detailnya secara terpisah lalu digabungkan.
-
-        // Ambil semua order_id dari hasil pencarian
         const orderIds = data.map(order => order.order_id);
-
         let servicesMap = {};
+
         if (orderIds.length > 0) {
             const { data: details, error: detailsError } = await supabase
                 .from('detail_transaksi')
@@ -72,7 +55,6 @@ const getOrderHistory = async (req, res) => {
                 .in('order_id', orderIds);
 
             if (!detailsError && details) {
-                // Kelompokkan layanan berdasarkan order_id
                 details.forEach(detail => {
                     if (!servicesMap[detail.order_id]) {
                         servicesMap[detail.order_id] = [];
@@ -84,11 +66,8 @@ const getOrderHistory = async (req, res) => {
             }
         }
 
-        // Format data untuk dikirim ke frontend
         const formattedData = data.map(order => {
-            // Ambil array layanan, gabungkan dengan koma jika lebih dari satu
             const layananLengkap = servicesMap[order.order_id] ? servicesMap[order.order_id].join(', ') : '-';
-
             return {
                 id: order.order_id,
                 resi: order.resi_number,
@@ -109,6 +88,114 @@ const getOrderHistory = async (req, res) => {
     }
 };
 
+// GET: Ambil daftar layanan untuk dropdown pesanan baru
+const getLayanan = async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('layanan')
+            .select('service_id, service_name, type, rate');
+
+        if (error) throw error;
+
+        return res.status(200).json({ status: 'success', data });
+    } catch (error) {
+        console.error('Error fetching layanan:', error);
+        return res.status(500).json({ status: 'error', message: 'Gagal memuat data layanan' });
+    }
+};
+
+// POST: Buat pesanan baru dan simpan ke database
+const createOrder = async (req, res) => {
+    const { pelanggan, no_hp, layanan_id, kuantitas, total_biaya, metode_bayar, catatan } = req.body;
+
+    try {
+        // 1. Cek atau Tambah Customer
+        let customerId;
+        const { data: existCust, error: errCust } = await supabase
+            .from('customer')
+            .select('customer_id')
+            .eq('phone_number', no_hp)
+            .maybeSingle();
+
+        if (errCust) throw errCust;
+
+        if (!existCust) {
+            const generatedCustId = 'CUS-' + Date.now();
+            const { data: newCust, error: newCustErr } = await supabase
+                .from('customer')
+                .insert([{ customer_id: generatedCustId, name: pelanggan, phone_number: no_hp }])
+                .select('customer_id')
+                .single();
+
+            if (newCustErr) throw newCustErr;
+            customerId = newCust.customer_id;
+        } else {
+            customerId = existCust.customer_id;
+        }
+
+        // 2. Format Metode Bayar agar Sesuai Check Constraint DB ('Tunai', 'Transfer', 'QRIS')
+        const methodMap = {
+            'tunai': 'Tunai',
+            'transfer': 'Transfer',
+            'qris': 'QRIS'
+        };
+        const formattedPaymentMethod = methodMap[metode_bayar ? metode_bayar.toLowerCase() : 'tunai'] || 'Tunai';
+
+        // 3. Generate ID Unik untuk order_id dan nomor resi
+        const generatedOrderId = 'ORD-' + Date.now();
+        const timestamp = Date.now().toString().slice(-4);
+        const randomStr = Math.random().toString(36).substring(2, 5).toUpperCase();
+        const resiNumber = `ZL-${timestamp}${randomStr}`;
+
+        // 4. Insert ke Tabel Pesanan
+        const { data: order, error: orderErr } = await supabase
+            .from('pesanan')
+            .insert([{
+                order_id: generatedOrderId,
+                resi_number: resiNumber,
+                transaction_date: new Date().toISOString(),
+                laundry_status: 'Dicuci',
+                payment_status: 'Lunas',
+                payment_method: formattedPaymentMethod,
+                total_cost: total_biaya,
+                customer_id: customerId
+            }])
+            .select('order_id, resi_number')
+            .single();
+
+        if (orderErr) throw orderErr;
+
+        // 5. Insert ke Detail Transaksi
+        const generatedDetailId = 'DTL-' + Date.now();
+        const { error: detailErr } = await supabase
+            .from('detail_transaksi')
+            .insert([{
+                order_detail_id: generatedDetailId,
+                order_id: order.order_id,
+                service_id: layanan_id,
+                quantity: kuantitas,
+                subtotal: total_biaya
+            }]);
+
+        if (detailErr) throw detailErr;
+
+        return res.status(201).json({
+            status: 'success',
+            message: 'Pesanan berhasil disimpan',
+            data: {
+                order_id: order.order_id,
+                resi_number: order.resi_number
+            }
+        });
+
+    } catch (error) {
+        console.error('Error creating order:', error);
+        return res.status(500).json({ status: 'error', message: 'Gagal membuat pesanan baru' });
+    }
+};
+
 module.exports = {
-    getOrderHistory
+    getOrderHistory,
+    getLayanan,
+    createOrder
 };
