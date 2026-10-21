@@ -1,3 +1,5 @@
+// frontend/js/pages/auth/auth.js
+
 document.addEventListener("DOMContentLoaded", () => {
     // --- Referensi Elemen Utama ---
     const tabLogin = document.getElementById("tab-login");
@@ -7,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const authTitle = document.getElementById("auth-title");
     const authSubtitle = document.getElementById("auth-subtitle");
 
-    // Tambahan elemen untuk animasi
+    // Elemen untuk animasi
     const formTrack = document.getElementById("form-track");
     const formWrapper = document.querySelector(".form-slider-wrapper");
 
@@ -16,10 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
         formWrapper.style.height = activeElement.scrollHeight + "px";
     };
 
-    // Render awal saat web dibuka agar tinggi sesuai dengan form login
+    // Render awal
     setTimeout(() => adjustHeight(formLogin), 50);
 
-    // --- Fungsi Helper: Tampilkan/Sembunyikan Error Spesifik ---
+    // --- Fungsi Helper: Error ---
     const showFieldError = (idTarget, message) => {
         const errElement = document.getElementById(idTarget);
         if (errElement) {
@@ -41,17 +43,12 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         clearAllErrors();
         formLogin.reset();
-
         tabLogin.classList.add("on");
         tabRegister.classList.remove("on");
-
         formLogin.classList.add("active");
         formRegister.classList.remove("active");
-
-        // Perintah animasi kembali ke sisi form Login (0%)
         formTrack.style.transform = "translateX(0%)";
         adjustHeight(formLogin);
-
         authTitle.textContent = "Masuk staf";
         authSubtitle.textContent = "Khusus Owner dan Employee.";
     });
@@ -60,30 +57,27 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         clearAllErrors();
         formRegister.reset();
-
         tabRegister.classList.add("on");
         tabLogin.classList.remove("on");
-
         formRegister.classList.add("active");
         formLogin.classList.remove("active");
-
-        // Perintah animasi bergeser separuh rel ke sisi form Register (-50%)
         formTrack.style.transform = "translateX(-50%)";
         adjustHeight(formRegister);
-
         authTitle.textContent = "Daftar akun";
         authSubtitle.innerHTML = "Khusus Employee. Akun aktif setelah disetujui<br>Owner.";
     });
 
-    // --- Pola Regex (Regular Expression) ---
-    // Email wajib memiliki '@' dan domain yang valid seperti '.com', '.id', dsb.
+    // --- Pola Regex ---
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    // Nama harus dimulai dengan huruf kapital untuk setiap katanya. Contoh: 'Samuel', 'Samuel Budi'
     const capitalizeNameRegex = /^([A-Z][a-z]+)(\s[A-Z][a-z]+)*$/;
 
-    // --- LOGIKA FORM LOGIN ---
-    formLogin.addEventListener("submit", (e) => {
-        e.preventDefault(); // Mencegah reload halaman
+    // ==========================================
+    // LOGIKA INTEGRASI API BACKEND 
+    // ==========================================
+
+    // --- 1. PROSES LOGIN ---
+    formLogin.addEventListener("submit", async (e) => {
+        e.preventDefault();
         clearAllErrors();
 
         let isValid = true;
@@ -91,37 +85,65 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = document.getElementById("login-email").value.trim();
         const password = document.getElementById("login-password").value;
 
-        // 1. Validasi Role
+        // Validasi Klien
         if (role === "") {
             showFieldError("err-login-role", "Harap pilih status peran Anda.");
             isValid = false;
         }
-
-        // 2. Validasi Email
         if (!emailRegex.test(email)) {
             showFieldError("err-login-email", "Format email tidak valid (contoh: nama@email.com).");
             isValid = false;
         }
-
-        // 3. Validasi Sandi
         if (password.length < 8) {
             showFieldError("err-login-password", "Kata sandi salah atau kurang dari 8 karakter.");
             isValid = false;
         }
 
-        if (!isValid) return; // Stop eksekusi jika ada error
+        if (!isValid) return;
 
-        // Jika berhasil
-        console.log("Mencoba login...", { role, email, password });
-        if (role === "owner") {
-            window.location.href = "/frontend/pages/owner/dashboard.html";
-        } else {
-            alert("Berhasil login sebagai Employee.");
+        // Proses API
+        try {
+            const btnSubmit = formLogin.querySelector('button[type="submit"]');
+            const originalText = btnSubmit.textContent;
+            btnSubmit.textContent = "Mengecek...";
+            btnSubmit.disabled = true;
+
+            const response = await fetch('http://localhost:3000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, role })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.status === 'success') {
+                // Simpan token untuk sesi aktif
+                localStorage.setItem('token', result.data.token);
+                localStorage.setItem('role', result.data.user.role);
+                localStorage.setItem('name', result.data.user.name);
+
+                // Arahkan (Redirect) ke halaman yang benar
+                if (result.data.user.role === 'Owner') {
+                    window.location.href = "/frontend/pages/owner/dashboard.html";
+                } else {
+                    window.location.href = "/frontend/pages/employee/pesanan-baru.html";
+                }
+            } else {
+                // Tampilkan pesan error spesifik dari backend (misal: "Akun belum di-approve Owner")
+                alert("Login gagal: " + (result.message || 'Email, sandi, atau role salah.'));
+            }
+        } catch (error) {
+            console.error("Kesalahan jaringan:", error);
+            alert("Gagal terhubung ke server backend Zifa Laundry.");
+        } finally {
+            const btnSubmit = formLogin.querySelector('button[type="submit"]');
+            btnSubmit.textContent = "Masuk";
+            btnSubmit.disabled = false;
         }
     });
 
-    // --- LOGIKA FORM REGISTER ---
-    formRegister.addEventListener("submit", (e) => {
+    // --- 2. PROSES DAFTAR (EMPLOYEE) ---
+    formRegister.addEventListener("submit", async (e) => {
         e.preventDefault();
         clearAllErrors();
 
@@ -131,25 +153,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const password = document.getElementById("reg-password").value;
         const confirmPassword = document.getElementById("reg-password-confirm").value;
 
-        // 1. Validasi Nama Kapital
+        // Validasi Klien
         if (!capitalizeNameRegex.test(name)) {
             showFieldError("err-reg-name", "Tiap awalan kata harus huruf kapital (contoh: Samuel Budi).");
             isValid = false;
         }
-
-        // 2. Validasi Email
         if (!emailRegex.test(email)) {
             showFieldError("err-reg-email", "Format email tidak valid (wajib menggunakan @ dan domain).");
             isValid = false;
         }
-
-        // 3. Validasi Kekuatan Kata Sandi
         if (password.length < 8) {
             showFieldError("err-reg-password", "Kata sandi wajib minimal 8 karakter.");
             isValid = false;
         }
-
-        // 4. Validasi Konfirmasi Kata Sandi
         if (confirmPassword !== password) {
             showFieldError("err-reg-confirm", "Kata sandi yang diulang tidak cocok.");
             isValid = false;
@@ -157,9 +173,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!isValid) return;
 
-        console.log("Mencoba mendaftar...", { name, email, password });
-        alert("Pendaftaran berhasil! Akun Anda menunggu persetujuan Owner.");
+        // Proses API
+        try {
+            const btnSubmit = formRegister.querySelector('button[type="submit"]');
+            const originalText = btnSubmit.textContent;
+            btnSubmit.textContent = "Mendaftarkan...";
+            btnSubmit.disabled = true;
 
-        tabLogin.click(); // Pindah kembali ke view login setelah mendaftar
+            const response = await fetch('http://localhost:3000/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.status === 'success') {
+                alert("Pendaftaran berhasil! Akun Anda sedang menunggu persetujuan Owner.");
+                tabLogin.click(); // Kembali ke tab login
+            } else {
+                alert("Gagal mendaftar: " + result.message);
+            }
+        } catch (error) {
+            console.error("Kesalahan jaringan:", error);
+            alert("Gagal terhubung ke server backend Zifa Laundry.");
+        } finally {
+            const btnSubmit = formRegister.querySelector('button[type="submit"]');
+            btnSubmit.textContent = "Daftar";
+            btnSubmit.disabled = false;
+        }
     });
 });

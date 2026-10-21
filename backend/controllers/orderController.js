@@ -106,7 +106,7 @@ const getLayanan = async (req, res) => {
 
 // POST: Buat pesanan baru dan simpan ke database
 const createOrder = async (req, res) => {
-    const { pelanggan, no_hp, layanan_id, kuantitas, total_biaya, metode_bayar, catatan } = req.body;
+    const { pelanggan, no_hp, layanan_id, kuantitas, total_biaya, metode_bayar } = req.body;
 
     try {
         // 1. Cek atau Tambah Customer
@@ -133,7 +133,7 @@ const createOrder = async (req, res) => {
             customerId = existCust.customer_id;
         }
 
-        // 2. Format Metode Bayar agar Sesuai Check Constraint DB ('Tunai', 'Transfer', 'QRIS')
+        // 2. Format Metode Bayar 
         const methodMap = {
             'tunai': 'Tunai',
             'transfer': 'Transfer',
@@ -141,20 +141,33 @@ const createOrder = async (req, res) => {
         };
         const formattedPaymentMethod = methodMap[metode_bayar ? metode_bayar.toLowerCase() : 'tunai'] || 'Tunai';
 
-        // 3. Generate ID Unik untuk order_id dan nomor resi
+        // 3. LOGIKA CERDAS: Cek Nama Layanan untuk Penentuan Status Awal
+        let initialStatus = 'Dicuci';
+        const { data: svcData } = await supabase
+            .from('layanan')
+            .select('service_name')
+            .eq('service_id', layanan_id)
+            .maybeSingle();
+
+        // Jika layanan yang dipilih adalah "Setrika Saja", langsung masuk kolom Disetrika
+        if (svcData && svcData.service_name.toLowerCase().includes('setrika saja')) {
+            initialStatus = 'Disetrika';
+        }
+
+        // 4. Generate ID Unik
         const generatedOrderId = 'ORD-' + Date.now();
         const timestamp = Date.now().toString().slice(-4);
         const randomStr = Math.random().toString(36).substring(2, 5).toUpperCase();
         const resiNumber = `ZL-${timestamp}${randomStr}`;
 
-        // 4. Insert ke Tabel Pesanan
+        // 5. Insert ke Tabel Pesanan menggunakan initialStatus
         const { data: order, error: orderErr } = await supabase
             .from('pesanan')
             .insert([{
                 order_id: generatedOrderId,
                 resi_number: resiNumber,
                 transaction_date: new Date().toISOString(),
-                laundry_status: 'Dicuci',
+                laundry_status: initialStatus, // Memasukkan status dinamis di sini
                 payment_status: 'Lunas',
                 payment_method: formattedPaymentMethod,
                 total_cost: total_biaya,
@@ -165,7 +178,7 @@ const createOrder = async (req, res) => {
 
         if (orderErr) throw orderErr;
 
-        // 5. Insert ke Detail Transaksi
+        // 6. Insert ke Detail Transaksi (Tanpa kolom notes)
         const generatedDetailId = 'DTL-' + Date.now();
         const { error: detailErr } = await supabase
             .from('detail_transaksi')
@@ -194,8 +207,28 @@ const createOrder = async (req, res) => {
     }
 };
 
+// PATCH: Perbarui status cucian
+const updateLaundryStatus = async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    try {
+        const { error } = await supabase
+            .from('pesanan')
+            .update({ laundry_status: status })
+            .eq('order_id', id);
+
+        if (error) throw error;
+        return res.status(200).json({ status: 'success', message: 'Status berhasil diperbarui' });
+    } catch (error) {
+        console.error('Error updating status:', error);
+        return res.status(500).json({ status: 'error', message: 'Gagal memperbarui status cucian' });
+    }
+};
+
 module.exports = {
     getOrderHistory,
     getLayanan,
-    createOrder
+    createOrder,
+    updateLaundryStatus
 };

@@ -259,10 +259,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const dummyData = [
                 { service_id: "L01", service_name: "Bedcover", type: "Satuan", rate: 25000 },
                 { service_id: "L02", service_name: "Cuci Kering", type: "Kiloan", rate: 8000 },
-                { service_id: "L03", service_name: "Cuci Kering + Lipat", type: "Kiloan", rate: 10000 },
-                { service_id: "L04", service_name: "Cuci Kering + Lipat + Setrika", type: "Kiloan", rate: 15000 },
-                { service_id: "L05", service_name: "Jas", type: "Satuan", rate: 20000 },
-                { service_id: "L06", service_name: "Setrika Saja", type: "Kiloan", rate: 5000 }
+                { service_id: "L03", service_name: "Cuci Kering + Setrika", type: "Kiloan", rate: 13000 },
+                { service_id: "L04", service_name: "Jas", type: "Satuan", rate: 20000 },
+                { service_id: "L05", service_name: "Setrika Saja", type: "Kiloan", rate: 5000 }
             ];
             layananList = dummyData;
             renderLayananOptions(layananList);

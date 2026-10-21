@@ -10,4 +10,7 @@ router.get('/layanan', orderController.getLayanan);
 router.get('/', orderController.getOrderHistory);
 router.post('/', orderController.createOrder);
 
+// PATCH /api/orders/:id/status - Update Status Cucian
+router.patch('/:id/status', orderController.updateLaundryStatus);
+
 module.exports = router;
