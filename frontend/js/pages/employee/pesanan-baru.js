@@ -5,14 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const formPesanan = document.getElementById("form-pesanan");
     const selectLayanan = document.getElementById("layanan");
     const inputKuantitas = document.getElementById("kuantitas");
-    const inputUangWrapper = document.getElementById("input-uang-wrapper");
-    const inputUangDiterima = document.getElementById("uang_diterima");
     const ringkasanItems = document.getElementById("ringkasan-items");
     const textTotalBiaya = document.getElementById("total-biaya");
     const btnTipeKilo = document.getElementById("tipe-kilo");
     const btnTipeSatuan = document.getElementById("tipe-satuan");
     const payBtns = document.querySelectorAll(".pay-btn");
-    const proofArea = document.getElementById("proof-area");
     const btnSimpanCetak = document.getElementById("btn-simpan-cetak");
     const btnKirimWa = document.getElementById("btn-kirim-wa");
     const btnLogout = document.querySelector(".logout-btn");
@@ -197,14 +194,6 @@ document.addEventListener("DOMContentLoaded", () => {
         updateSlider("seg-metode-bayar");
 
         selectedMethod = targetBtn.dataset.method;
-
-        if (selectedMethod === "tunai") {
-            proofArea.style.display = "none";
-            inputUangWrapper.style.display = "block";
-        } else {
-            proofArea.style.display = "block";
-            inputUangWrapper.style.display = "none";
-        }
     }
 
     function handleKirimWa() {
@@ -288,9 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
             layanan_id: formData.get("layanan_id"),
             kuantitas: parseFloat(formData.get("kuantitas")),
             total_biaya: totalBiaya,
-            metode_bayar: selectedMethod,
-            uang_diterima: formData.get("uang_diterima") || 0,
-            catatan: formData.get("catatan")
+            metode_bayar: selectedMethod
         };
 
         try {

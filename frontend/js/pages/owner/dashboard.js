@@ -43,14 +43,22 @@ function formatRupiah(angka) {
  * Update 4 Kartu Statistik
  */
 function renderStats(stats) {
-    // Menargetkan elemen tag <b> di dalam 4 kartu secara berurutan
-    const statCards = document.querySelectorAll('.grid.g4 .card.st b');
+    const statCards = document.querySelectorAll('.grid.g4 .card.st');
     
     if (statCards.length >= 4) {
-        statCards[0].textContent = formatRupiah(stats.pendapatanHariIni);
-        statCards[1].textContent = stats.pesananMasuk;
-        statCards[2].textContent = stats.dalamProses;
-        statCards[3].textContent = stats.siapDiambil;
+        // Kartu 1: Pendapatan Hari Ini
+        statCards[0].querySelector('b').textContent = formatRupiah(stats.pendapatanHariIni);
+        statCards[0].querySelector('em').textContent = `dari ${stats.pesananMasuk} transaksi`;
+
+        // Kartu 2: Pesanan Masuk
+        statCards[1].querySelector('b').textContent = stats.pesananMasuk;
+        // statCards[1].querySelector('em').textContent = 'hari ini'; (Bisa dibiarkan statis)
+
+        // Kartu 3: Dalam Proses
+        statCards[2].querySelector('b').textContent = stats.dalamProses;
+
+        // Kartu 4: Siap Diambil
+        statCards[3].querySelector('b').textContent = stats.siapDiambil;
     }
 }
 

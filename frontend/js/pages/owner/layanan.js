@@ -86,11 +86,16 @@ async function handleFormSubmit(e) {
         rate: parseInt(rate)
     };
 
+    // Tangkap elemen tombol dan ubah state-nya menjadi loading
+    const btnSubmit = document.getElementById('btn-submit-layanan');
+    const originalText = btnSubmit.textContent; // Bisa "Simpan layanan" atau "Perbarui Layanan"
+    btnSubmit.textContent = 'Memproses...';
+    btnSubmit.disabled = true;
+
     try {
         let url = 'http://localhost:3000/api/services';
-        let method = 'POST'; // Default adalah CREATE
+        let method = 'POST'; 
 
-        // Jika ID tersembunyi ada isinya, berarti mode UPDATE
         if (idHidden) {
             url = `http://localhost:3000/api/services/${idHidden}`;
             method = 'PUT';
@@ -102,19 +107,22 @@ async function handleFormSubmit(e) {
             body: JSON.stringify(payload)
         });
 
-        // PERBAIKAN 3: Ekstrak JSON dari response agar variabel 'result' dikenali
         const result = await response.json();
 
         if (response.ok) {
             showToast(result.message, 'success');
-            resetFormMode(); // Kembalikan form ke keadaan kosong
-            fetchServices(); // Refresh tabel
+            resetFormMode(); 
+            fetchServices(); 
         } else {
             showToast(result.message || 'Terjadi kesalahan', 'error');
         }
     } catch (error) {
         showToast('Gagal menghubungi server', 'error');
-        console.error(error); // Untuk membantu pelacakan jika ada error lain
+        console.error(error); 
+    } finally {
+        // Kembalikan teks dan aktifkan tombol kembali setelah selesai
+        btnSubmit.textContent = originalText;
+        btnSubmit.disabled = false;
     }
 }
 
@@ -140,18 +148,36 @@ function resetFormMode() {
 
 // === 4. DELETE: Hapus Data ===
 window.openDeleteModal = function (id, name) {
-    serviceIdToDelete = id; // Simpan ID ke variabel global
+    serviceIdToDelete = id; 
     document.getElementById('delete-service-name').textContent = name;
-    document.getElementById('delete-modal').style.display = 'flex'; // Tampilkan modal
+    
+    const modal = document.getElementById('delete-modal');
+    modal.style.display = 'flex'; 
+    // Tambahkan delay kecil agar animasi CSS sempat berjalan
+    setTimeout(() => modal.classList.add('show-modal'), 10);
 };
 
 function closeDeleteModal() {
     serviceIdToDelete = null;
-    document.getElementById('delete-modal').style.display = 'none'; // Sembunyikan modal
+    const modal = document.getElementById('delete-modal');
+    
+    // Hilangkan class animasi terlebih dahulu
+    modal.classList.remove('show-modal');
+    
+    // Tunggu transisi 0.3 detik selesai, baru hilangkan dari DOM
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
 }
 
 async function executeDelete() {
     if (!serviceIdToDelete) return;
+
+    // Tambahkan efek loading pada tombol agar pengguna tahu proses sedang berjalan
+    const btnConfirm = document.getElementById('btn-confirm-delete');
+    const originalText = btnConfirm.textContent;
+    btnConfirm.textContent = 'Menghapus...';
+    btnConfirm.disabled = true;
 
     try {
         const response = await fetch(`http://localhost:3000/api/services/${serviceIdToDelete}`, {
@@ -161,13 +187,16 @@ async function executeDelete() {
 
         if (response.ok) {
             showToast(result.message, 'success');
-            fetchServices();
+            fetchServices(); // Refresh tabel setelah terhapus
         } else {
             showToast(result.message || 'Gagal menghapus', 'error');
         }
     } catch (error) {
         showToast('Gagal menghubungi server', 'error');
     } finally {
-        closeDeleteModal(); // Selalu tutup modal setelah selesai
+        // Kembalikan kondisi tombol dan tutup modal
+        btnConfirm.textContent = originalText;
+        btnConfirm.disabled = false;
+        closeDeleteModal(); 
     }
 }

@@ -57,19 +57,21 @@ const getFinancialReport = async (req, res) => {
 
         if (period === 'harian') {
             // Kelompokkan per sesi waktu: Pagi (08-12), Siang (12-16), Sore (16-20)
-            const sessions = { pagi: { count: 0, sum: 0 }, siang: { count: 0, sum: 0 }, sore: { count: 0, sum: 0 } };
+            const sessions = { pagi: { count: 0, sum: 0 }, siang: { count: 0, sum: 0 }, sore: { count: 0, sum: 0 }, malam: { count: 0, sum: 0 } };
 
             orders.forEach(order => {
                 const hour = dayjs(order.transaction_date).hour();
                 if (hour >= 8 && hour < 12) { sessions.pagi.count++; sessions.pagi.sum += Number(order.total_cost); }
                 else if (hour >= 12 && hour < 16) { sessions.siang.count++; sessions.siang.sum += Number(order.total_cost); }
                 else if (hour >= 16 && hour <= 20) { sessions.sore.count++; sessions.sore.sum += Number(order.total_cost); }
+                else if (hour > 20 || hour < 24) { sessions.malam.count++; sessions.malam.sum += Number(order.total_cost); }
             });
 
             groupedData = [
                 { label: 'Pagi (08.00 - 12.00)', count: sessions.pagi.count, revenue: sessions.pagi.sum },
                 { label: 'Siang (12.00 - 16.00)', count: sessions.siang.count, revenue: sessions.siang.sum },
-                { label: 'Sore (16.00 - 20.00)', count: sessions.sore.count, revenue: sessions.sore.sum }
+                { label: 'Sore (16.00 - 20.00)', count: sessions.sore.count, revenue: sessions.sore.sum },
+                { label: 'Malam (20.00 - 24.00)', count: sessions.malam.count, revenue: sessions.malam.sum }
             ];
 
         } else if (period === 'mingguan') {
@@ -189,19 +191,21 @@ const exportFinancialReport = async (req, res) => {
         if (period === 'harian') {
             labelHeader = 'Sesi Waktu';
             dateRangeStr = baseDate.format('DD_MMM_YYYY');
-            const sessions = { pagi: { count: 0, sum: 0 }, siang: { count: 0, sum: 0 }, sore: { count: 0, sum: 0 } };
+            const sessions = { pagi: { count: 0, sum: 0 }, siang: { count: 0, sum: 0 }, sore: { count: 0, sum: 0 }, malam: { count: 0, sum: 0 } };
 
             orders.forEach(order => {
                 const hour = dayjs(order.transaction_date).hour();
                 if (hour >= 8 && hour < 12) { sessions.pagi.count++; sessions.pagi.sum += Number(order.total_cost); }
                 else if (hour >= 12 && hour < 16) { sessions.siang.count++; sessions.siang.sum += Number(order.total_cost); }
                 else if (hour >= 16 && hour <= 20) { sessions.sore.count++; sessions.sore.sum += Number(order.total_cost); }
+                else if (hour >= 20 && hour <= 24) { sessions.malam.count++; sessions.malam.sum += Number(order.total_cost); }
             });
 
             groupedData = [
                 { label: 'Pagi (08.00 - 12.00)', count: sessions.pagi.count, revenue: sessions.pagi.sum },
                 { label: 'Siang (12.00 - 16.00)', count: sessions.siang.count, revenue: sessions.siang.sum },
-                { label: 'Sore (16.00 - 20.00)', count: sessions.sore.count, revenue: sessions.sore.sum }
+                { label: 'Sore (16.00 - 20.00)', count: sessions.sore.count, revenue: sessions.sore.sum },
+                { label: 'Malam (20.00 - 24.00)', count: sessions.malam.count, revenue: sessions.malam.sum }
             ];
         } else if (period === 'mingguan') {
             labelHeader = 'Tanggal';
@@ -250,11 +254,11 @@ const exportFinancialReport = async (req, res) => {
 
         // 4. Susun Format CSV
         // Header
-        let csvString = `"${labelHeader}","Jumlah Transaksi","Pendapatan"\n`;
+        let csvString = `"${labelHeader}";"Jumlah Transaksi";"Pendapatan"\n`;
 
         // Baris Isi
         groupedData.forEach(row => {
-            csvString += `"${row.label}","${row.count}","${row.revenue}"\n`;
+            csvString += `"${row.label}";"${row.count}";"${row.revenue}"\n`;
         });
 
         // 5. Atur Header Response agar Browser Mengunduhnya sebagai File

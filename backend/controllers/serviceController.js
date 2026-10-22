@@ -8,7 +8,7 @@ const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // READ: Ambil semua data dari tabel 'layanan'
-const getServices = async (req, res) => {
+const getServices = async (_req, res) => {
     try {
         const { data, error } = await supabase
             .from('layanan')
@@ -91,9 +91,17 @@ const deleteService = async (req, res) => {
             .eq('service_id', id)
             .select();
 
-        if (error) throw error;
+        if (error) {
+            // Tangkap error Foreign Key Constraint jika layanan sudah terpakai di riwayat pesanan
+            if (error.code === '23503') {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'Gagal: Layanan ini sudah terpakai dalam transaksi pelanggan. Ubah nama/tarifnya saja.'
+                });
+            }
+            throw error; // Lempar error lain jika ada
+        }
 
-        // Cek jika tidak ada data yang terhapus (ID tidak valid)
         if (data.length === 0) {
             return res.status(404).json({ status: 'error', message: 'Layanan tidak ditemukan' });
         }

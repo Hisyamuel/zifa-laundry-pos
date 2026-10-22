@@ -72,11 +72,6 @@
                         Berat (kg) / jumlah (pcs)
                         <input type="number" id="kuantitas" name="kuantitas" placeholder="0" min="0.1" step="0.1" required>
                     </label>
-
-                    <label class="f">
-                        Catatan
-                        <input type="text" id="catatan" name="catatan" placeholder="mis. pisahkan pakaian putih">
-                    </label>
                 </div>
 
                 <!-- Kolom Kanan: Ringkasan -->
@@ -101,24 +96,6 @@
                             <button type="button" class="pay-btn" data-method="qris">QRIS</button>
                         </div>
                     </div>
-
-                    <!-- Elemen Pengganti Area Berarsir -->
-                    <div id="proof-area" style="display: none; margin-bottom: 16px;">
-                        <label class="f">
-                            No. Referensi / Nama Pengirim
-                            <input type="text" id="no_referensi" name="no_referensi" placeholder="mis. BCA a.n. Budi / ID QRIS">
-                        </label>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-size: 14px;">
-                        <span style="color: var(--mu); font-weight: 500;">Status pembayaran</span>
-                        <span class="bd o" style="font-weight: normal; font-size: 12px; padding: 3px 12px; color: var(--mu);">Menunggu validasi</span>
-                    </div>
-
-                    <label class="f" id="input-uang-wrapper">
-                        Uang diterima (Rp)
-                        <input type="number" id="uang_diterima" name="uang_diterima" placeholder="0" min="0">
-                    </label>
 
                     <button type="submit" class="b p w" id="btn-simpan-cetak" style="margin-top: 15px; margin-bottom: 10px;">Simpan & cetak resi</button>
                     <button type="button" class="b w" id="btn-kirim-wa">Kirim resi digital</button>
