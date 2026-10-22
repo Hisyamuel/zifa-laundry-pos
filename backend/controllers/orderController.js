@@ -50,7 +50,7 @@ const getOrderHistory = async (req, res) => {
                 .select(`
                     order_id,
                     quantity,
-                    layanan (service_name)
+                    layanan (service_name, type)
                 `)
                 .in('order_id', orderIds);
 
@@ -60,7 +60,8 @@ const getOrderHistory = async (req, res) => {
                         servicesMap[detail.order_id] = [];
                     }
                     const serviceName = detail.layanan ? detail.layanan.service_name : 'Unknown';
-                    const satuan = detail.quantity > 0 ? (serviceName.toLowerCase().includes('kiloan') ? 'kg' : 'pcs') : '';
+                    const serviceType = detail.layanan ? detail.layanan.type : '';
+                    const satuan = detail.quantity > 0 ? (serviceType === 'Kiloan' ? 'kg' : 'pcs') : '';
                     servicesMap[detail.order_id].push(`${serviceName} · ${detail.quantity} ${satuan}`);
                 });
             }

@@ -1,9 +1,7 @@
 // backend/controllers/employeeController.js
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
 // GET: Ambil daftar semua pegawai (beserta relasi email dari tabel users jika ada)
 const getEmployees = async (req, res) => {
@@ -16,6 +14,7 @@ const getEmployees = async (req, res) => {
                 name,
                 phone_number,
                 account_status,
+                created_at,
                 users!inner (email)
             `)
             .order('name', { ascending: true });
@@ -38,43 +37,39 @@ const getEmployees = async (req, res) => {
     }
 };
 
-// PUT: Setujui akun pegawai (ubah status dari 'Pending' ke 'Aktif')
+// PUT: Setujui Akun
 const approveEmployee = async (req, res) => {
     const { id } = req.params;
     try {
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('employee')
-            .update({ account_status: 'Aktif' })
-            .eq('employee_id', id)
-            .select();
+            .update({ account_status: 'Aktif' }) // Harus sama persis dengan aturan database
+            .eq('employee_id', id);
 
         if (error) throw error;
-        if (data.length === 0) return res.status(404).json({ status: 'error', message: 'Pegawai tidak ditemukan' });
-
-        return res.status(200).json({ status: 'success', message: 'Akun pegawai berhasil disetujui' });
+        return res.status(200).json({ status: 'success', message: 'Akun pegawai berhasil disetujui.' });
     } catch (error) {
-        return res.status(500).json({ status: 'error', message: error.message });
+        console.error('Error approve:', error);
+        return res.status(500).json({ status: 'error', message: 'Gagal menyetujui akun.' });
     }
 };
 
-// PUT: Tolak akun pegawai (ubah status ke 'Ditolak' atau Anda bisa menggunakan DELETE jika ingin menghapus permanen)
+// DELETE: Tolak Akun (Hapus secara permanen)
 const rejectEmployee = async (req, res) => {
     const { id } = req.params;
     try {
-        // Opsi 1: Ubah status menjadi Ditolak
-        const { data, error } = await supabase
-            .from('employee')
-            .update({ account_status: 'Ditolak' })
-            .eq('employee_id', id)
-            .select();
-
-        // Opsi 2 (Alternatif): Langsung hapus dari tabel employee & users
-        // const { error } = await supabase.from('employee').delete().eq('employee_id', id);
+        // Cukup hapus dari tabel 'users'. 
+        // Berkat aturan ON DELETE CASCADE, data di tabel 'employee' akan otomatis ikut terhapus.
+        const { error } = await supabase
+            .from('users')
+            .delete()
+            .eq('user_id', id);
 
         if (error) throw error;
-        return res.status(200).json({ status: 'success', message: 'Pendaftaran akun ditolak' });
+        return res.status(200).json({ status: 'success', message: 'Pendaftaran ditolak/Akun dihapus.' });
     } catch (error) {
-        return res.status(500).json({ status: 'error', message: error.message });
+        console.error('Error reject:', error);
+        return res.status(500).json({ status: 'error', message: 'Gagal menolak akun.' });
     }
 };
 

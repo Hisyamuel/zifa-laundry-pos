@@ -1,20 +1,22 @@
 // frontend/js/pages/owner/pegawai.js
 
-// Variabel Global untuk Modal
 let currentEmployeeId = null;
-let targetStatus = null;
+let targetStatus = null; // Bisa berisi: 'Aktif', 'Nonaktif', atau 'Tolak'
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchEmployees();
-
-    // Event listener untuk modal
     document.getElementById('btn-cancel-modal').addEventListener('click', closeStatusModal);
     document.getElementById('btn-confirm-modal').addEventListener('click', executeStatusChange);
 });
 
 // --- SISTEM TOAST --- 
 function showToast(message, type = 'success') {
-    const container = document.getElementById('toast-container');
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     toast.textContent = message;
@@ -26,34 +28,25 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-// === 1. FETCH & RENDER DATA ===
+// === FETCH & RENDER DATA ===
 async function fetchEmployees() {
     try {
         const response = await fetch('http://localhost:3000/api/employees');
         const result = await response.json();
-
-        if (response.ok) {
-            processAndRenderData(result.data);
-        } else {
-            showToast(result.message || 'Gagal memuat data', 'error');
-        }
+        if (response.ok) processAndRenderData(result.data);
     } catch (error) {
         showToast('Gagal menghubungi server', 'error');
     }
 }
 
 function processAndRenderData(data) {
-    // Pisahkan data berdasarkan status
-    const pendingEmployees = data.filter(emp => emp.status === 'Pending');
-    // Pegawai yang sudah disetujui (Aktif / Nonaktif)
+    const pendingEmployees = data.filter(emp => emp.status === 'Menunggu persetujuan');
     const registeredEmployees = data.filter(emp => emp.status === 'Aktif' || emp.status === 'Nonaktif');
-
     renderPendingTable(pendingEmployees);
     renderEmployeeTable(registeredEmployees);
     updateSidebarNavCount(pendingEmployees.length);
 }
 
-// Format Tanggal (Misal: 09 Okt 2026)
 function formatDate(dateString) {
     if (!dateString) return '-';
     const options = { day: '2-digit', month: 'short', year: 'numeric' };
@@ -70,14 +63,13 @@ function renderPendingTable(employees) {
         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Belum ada data pegawai.</td></tr>';
         return;
     }
+
     badge.textContent = employees.length;
 
-    // Sembunyikan bagian pending jika tidak ada data
     if (employees.length === 0) {
         section.style.display = 'none';
         return;
     }
-
     section.style.display = 'block';
 
     employees.forEach(emp => {
@@ -88,13 +80,15 @@ function renderPendingTable(employees) {
             <td>${formatDate(emp.createdAt)}</td>
             <td>
                 <button onclick="approveAccount('${emp.id}')" class="b p" style="padding: 6px 12px; margin-right: 5px;">Setujui</button>
-                <button onclick="rejectAccount('${emp.id}')" class="b" style="padding: 6px 12px;">Tolak</button>
+                <!-- Panggil Modal Tolak -->
+                <button onclick="openRejectModal('${emp.id}', '${emp.name}')" class="b" style="padding: 6px 12px;">Tolak</button>
             </td>
         `;
         tbody.appendChild(tr);
     });
 }
 
+// --- RENDER TABEL PEGAWAI ---
 function renderEmployeeTable(employees) {
     const tbody = document.getElementById('table-employee-body');
     tbody.innerHTML = '';
@@ -104,11 +98,8 @@ function renderEmployeeTable(employees) {
     }
 
     employees.forEach(emp => {
-        // Tentukan styling badge status
         const isAktif = emp.status === 'Aktif';
         const badgeColor = isAktif ? 'background-color: #3b82f6; color: white;' : 'background-color: #334155; color: #cbd5e1;';
-
-        // Tentukan teks aksi kebalikan dari status saat ini
         const actionText = isAktif ? 'Nonaktifkan' : 'Aktifkan';
         const nextStatus = isAktif ? 'Nonaktif' : 'Aktif';
 
@@ -116,33 +107,27 @@ function renderEmployeeTable(employees) {
         tr.innerHTML = `
             <td>${emp.name}</td>
             <td>${emp.email}</td>
+            <td><span style="padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; ${badgeColor}">${emp.status}</span></td>
             <td>
-                <span style="padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; ${badgeColor}">
-                    ${emp.status}
-                </span>
-            </td>
-            <td>
-                <button onclick="openStatusModal('${emp.id}', '${emp.name}', '${nextStatus}')" class="btn-link text-blue">
-                    Ubah · ${actionText}
-                </button>
+                <button onclick="openStatusModal('${emp.id}', '${emp.name}', '${nextStatus}')" class="btn-link text-blue">${actionText}</button>
+                <span style="margin: 0 5px; color: var(--mu);">·</span>
+                <button onclick="openRejectModal('${emp.id}', '${emp.name}')" class="btn-link text-red">Hapus</button>
             </td>
         `;
         tbody.appendChild(tr);
     });
 }
 
-// Update angka notifikasi di Sidebar Navigasi
 function updateSidebarNavCount(pendingCount) {
     const navLinks = document.querySelectorAll('.side .menu-link');
     navLinks.forEach(link => {
         if (link.textContent.includes('Akun Pegawai')) {
-            // Jika ada pending, tampilkan angkanya. Jika 0, hilangkan angkanya.
             link.textContent = pendingCount > 0 ? `Akun Pegawai (${pendingCount})` : 'Akun Pegawai';
         }
     });
 }
 
-// === 2. AKSI: SETUJUI / TOLAK (PENDING) ===
+// === AKSI: SETUJUI (Tanpa Modal) ===
 async function approveAccount(id) {
     try {
         const response = await fetch(`http://localhost:3000/api/employees/${id}/approve`, { method: 'PUT' });
@@ -150,31 +135,13 @@ async function approveAccount(id) {
         if (response.ok) {
             showToast(result.message, 'success');
             fetchEmployees();
-        } else {
-            showToast(result.message, 'error');
-        }
+        } else showToast(result.message, 'error');
     } catch (error) {
         showToast('Gagal menghubungi server', 'error');
     }
 }
 
-async function rejectAccount(id) {
-    if (!confirm('Tolak pendaftaran akun ini?')) return;
-    try {
-        const response = await fetch(`http://localhost:3000/api/employees/${id}/reject`, { method: 'PUT' });
-        const result = await response.json();
-        if (response.ok) {
-            showToast(result.message, 'success');
-            fetchEmployees();
-        } else {
-            showToast(result.message, 'error');
-        }
-    } catch (error) {
-        showToast('Gagal menghubungi server', 'error');
-    }
-}
-
-// === 3. AKSI: UBAH STATUS (MODAL) ===
+// --- FUNGSI TAMPILKAN MODAL DENGAN ANIMASI ---
 window.openStatusModal = function (id, name, nextStatus) {
     currentEmployeeId = id;
     targetStatus = nextStatus;
@@ -182,35 +149,71 @@ window.openStatusModal = function (id, name, nextStatus) {
     document.getElementById('modal-title').textContent = nextStatus === 'Aktif' ? 'Aktifkan Akun' : 'Nonaktifkan Akun';
     document.getElementById('modal-desc').innerHTML = `Apakah Anda yakin ingin mengubah status <strong>${name}</strong> menjadi <strong>${nextStatus}</strong>?`;
 
-    // Ubah warna tombol konfirmasi agar sesuai konteks
     const btnConfirm = document.getElementById('btn-confirm-modal');
-    if (nextStatus === 'Nonaktif') {
-        btnConfirm.style.backgroundColor = '#ef4444'; // Merah
-        btnConfirm.style.borderColor = '#ef4444';
-    } else {
-        btnConfirm.style.backgroundColor = '#3b82f6'; // Biru (Zifa Primary)
-        btnConfirm.style.borderColor = '#3b82f6';
-    }
+    btnConfirm.style.backgroundColor = nextStatus === 'Nonaktif' ? '#ef4444' : '#3b82f6';
+    btnConfirm.style.borderColor = nextStatus === 'Nonaktif' ? '#ef4444' : '#3b82f6';
+    btnConfirm.textContent = 'Ya, Ubah Status';
 
-    document.getElementById('status-modal').style.display = 'flex';
+    // Gunakan class untuk animasi, hapus inline display
+    const modal = document.getElementById('status-modal');
+    modal.style.display = 'flex'; // Pastikan display flex aktif sebelum animasi
+    setTimeout(() => modal.classList.add('show-modal'), 10);
+};
+
+window.openRejectModal = function (id, name) {
+    currentEmployeeId = id;
+    targetStatus = 'Tolak';
+
+    document.getElementById('modal-title').textContent = 'Tolak / Hapus Akun';
+    document.getElementById('modal-desc').innerHTML = `Apakah Anda yakin ingin menolak/menghapus <strong>${name}</strong>? Data akan dihapus secara permanen.`;
+
+    const btnConfirm = document.getElementById('btn-confirm-modal');
+    btnConfirm.style.backgroundColor = '#ef4444';
+    btnConfirm.style.borderColor = '#ef4444';
+    btnConfirm.textContent = 'Ya, Hapus Permanen';
+
+    const modal = document.getElementById('status-modal');
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show-modal'), 10);
 };
 
 function closeStatusModal() {
     currentEmployeeId = null;
     targetStatus = null;
-    document.getElementById('status-modal').style.display = 'none';
+
+    const modal = document.getElementById('status-modal');
+    modal.classList.remove('show-modal');
+
+    // Tunggu animasi CSS selesai baru sembunyikan display
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
 }
 
+// === EKSEKUSI API DARI MODAL ===
 async function executeStatusChange() {
     if (!currentEmployeeId || !targetStatus) return;
 
     try {
-        const response = await fetch(`http://localhost:3000/api/employees/${currentEmployeeId}/toggle-status`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ newStatus: targetStatus })
-        });
+        let url = '';
+        let options = { headers: { 'Content-Type': 'application/json' } };
 
+        // Route Cerdas: Pisahkan DELETE dan PUT
+        if (targetStatus === 'Tolak') {
+            url = `http://localhost:3000/api/employees/${currentEmployeeId}/reject`;
+            options.method = 'DELETE';
+        } else {
+            url = `http://localhost:3000/api/employees/${currentEmployeeId}/toggle-status`;
+            options.method = 'PUT';
+            options.body = JSON.stringify({ newStatus: targetStatus });
+        }
+
+        const btnConfirm = document.getElementById('btn-confirm-modal');
+        const originalText = btnConfirm.textContent;
+        btnConfirm.textContent = "Memproses...";
+        btnConfirm.disabled = true;
+
+        const response = await fetch(url, options);
         const result = await response.json();
 
         if (response.ok) {
@@ -222,6 +225,8 @@ async function executeStatusChange() {
     } catch (error) {
         showToast('Gagal menghubungi server', 'error');
     } finally {
+        const btnConfirm = document.getElementById('btn-confirm-modal');
+        btnConfirm.disabled = false;
         closeStatusModal();
     }
 }

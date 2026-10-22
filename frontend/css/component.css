@@ -77,6 +77,12 @@
     text-decoration: underline;
 }
 
+.btn-link.text-red {
+    color: #f98383;
+}
+
+
+
 /* --- TOAST NOTIFICATION --- */
 .toast-container {
     position: fixed;
@@ -126,16 +132,23 @@
     right: 0;
     bottom: 0;
     background-color: rgba(15, 23, 42, 0.7);
-    /* Menyesuaikan tema gelap Zifa */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Saat modal aktif */
+.modal-overlay.show-modal {
+    opacity: 1;
+    visibility: visible;
 }
 
 .modal-content {
     background-color: #1e293b;
-    /* Warna card Zifa */
     border: 1px solid #334155;
     padding: 24px;
     border-radius: 12px;
@@ -143,6 +156,12 @@
     max-width: 400px;
     text-align: center;
     color: #f8fafc;
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-overlay.show-modal .modal-content {
+    transform: translateY(0);
 }
 
 .modal-content h3 {

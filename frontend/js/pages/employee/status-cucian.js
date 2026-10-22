@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Fungsi Render Papan Kanban
-    // Fungsi Render Papan Kanban
     function renderKanban(orders) {
         const cols = ['Dicuci', 'Dikeringkan', 'Disetrika', 'Siap Ambil', 'Selesai'];
         const counts = { 'Dicuci': 0, 'Dikeringkan': 0, 'Disetrika': 0, 'Siap Ambil': 0, 'Selesai': 0 };

@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors'); 
 const path = require('path');
+const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const employeeRoutes = require('./routes/employeeRoutes');
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/frontend', express.static(path.join(__dirname, '../frontend')));
 
 // Memasang rute pada jalur /api/
+app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/employees', employeeRoutes);
