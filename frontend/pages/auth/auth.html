@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Autentikasi Staf - Zifa Laundry</title>
+    <link rel="icon" href="/frontend/public/images/zifa-icon.png" type="image/x-icon">
     <link rel="stylesheet" href="/frontend/css/variables.css">
     <link rel="stylesheet" href="/frontend/css/component.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
@@ -40,12 +41,11 @@
         .au {
             width: 100%;
             max-width: 400px;
-            padding: 40px 13px;
+            padding: 40px 24px;
             background: var(--bg);
             opacity: 100%;
             border-radius: 16px;
             border: 1px solid var(--ln);
-            padding-left: 20px;
         }
 
         .au .logo {
@@ -130,20 +130,21 @@
         .form-slider-wrapper {
             overflow: hidden;
             width: 100%;
-            transition: height 0.4s ease-in-out; 
+            transition: height 0.4s ease-in-out;
         }
 
         /* Track untuk menempatkan kedua form secara sejajar (horizontal) */
         .form-slider-track {
             display: flex;
-            width: 200%; /* Lebar 200% karena memuat dua form */
+            width: 200%;
+            /* Lebar 200% karena memuat dua form */
             transition: transform 0.4s ease-in-out;
             align-items: flex-start;
         }
 
         /* Pengaturan masing-masing form menjadi 50% dari total panjang track */
         .form-section {
-            width: 50%; 
+            width: 50%;
             box-sizing: border-box;
             transition: opacity 0.4s ease;
         }
@@ -153,6 +154,20 @@
             opacity: 0;
             pointer-events: none;
             visibility: hidden;
+        }
+
+        .btn-link {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font: inherit;
+            padding: 0;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -202,6 +217,8 @@
                     <p style="font-size: 12px; margin-top: 16px;">
                         Employee yang masih menunggu persetujuan belum bisa masuk.
                     </p>
+
+                    <a class="btn-link" href="/frontend/pages/index.html">← Kembali ke Beranda</a>
                 </form>
 
                 <!-- FORM REGISTER (Tanpa 'novalidate') -->
@@ -227,7 +244,8 @@
 
                     <label class="f">
                         Kata sandi
-                        <input type="password" id="reg-password" placeholder="Minimal 8 karakter" required minlength="8">
+                        <input type="password" id="reg-password" placeholder="Minimal 8 karakter" required
+                            minlength="8">
                     </label>
                     <div class="err-msg" id="err-reg-password"></div>
 

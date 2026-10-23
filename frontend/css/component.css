@@ -48,7 +48,7 @@
 .f input,
 .f select {
     display: block;
-    width: 90%;
+    width: 100%;
     margin-top: 15px;
     padding: 9px 11px;
     border: 1px solid var(--ln);
@@ -56,7 +56,6 @@
     background: var(--sf);
     color: var(--tx);
     font: inherit;
-    /* Mengambil font-family utama */
 }
 
 /* Gaya khusus Placeholder agar tidak terlalu redup/gelap */

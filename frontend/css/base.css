@@ -1,0 +1,280 @@
+/* frontend/css/base.css */
+
+/* Reset & Dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--tx);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Tata Letak Kontainer */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Navigasi */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--ln);
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo i {
+    background: var(--grad);
+    color: var(--on);
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    font-style: normal;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.nav-links a {
+    color: var(--mu);
+    font-weight: 500;
+    font-size: 15px;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--tx);
+}
+
+/* Tombol Global */
+.btn {
+    display: inline-block;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-family: inherit;
+    text-align: center;
+}
+
+.btn-primary {
+    background: var(--ink);
+    color: var(--on);
+}
+
+.btn-primary:hover {
+    background: var(--ink-hover);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--ln);
+    color: var(--tx);
+}
+
+.btn-outline:hover {
+    background: var(--sf);
+    border-color: var(--mu);
+}
+
+/* Hero Section */
+.hero {
+    padding: 100px 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 52px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+}
+
+.hero h1 span {
+    background: var(--grad);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 18px;
+    color: var(--mu);
+    max-width: 600px;
+    margin: 0 auto 32px;
+}
+
+.hero-btns {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+/* Fitur Utama */
+.features {
+    padding: 60px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.feature-card {
+    background: var(--sf);
+    border: 1px solid var(--ln);
+    padding: 32px;
+    border-radius: 16px;
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--ink);
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--hat);
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 24px;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.feature-card h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.feature-card p {
+    color: var(--mu);
+    font-size: 15px;
+}
+
+/* 3 Langkah Cara Kerja */
+.steps {
+    padding: 80px 0;
+    text-align: center;
+}
+
+.steps h2 {
+    font-size: 32px;
+    margin-bottom: 48px;
+}
+
+.steps-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.step-item {
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+    text-align: center;
+}
+
+.step-number {
+    width: 48px;
+    height: 48px;
+    background: var(--grad);
+    color: var(--on);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0 auto 20px;
+}
+
+.step-item h4 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.step-item p {
+    color: var(--mu);
+    font-size: 14px;
+}
+
+/* Footer */
+.footer {
+    border-top: 1px solid var(--ln);
+    padding: 40px 0;
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer p {
+    color: var(--mu);
+    font-size: 14px;
+}
+
+.footer-links a {
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Responsif HP */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 36px;
+    }
+
+    .hero-btns {
+        flex-direction: column;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    /* Sembunyikan link teks di HP, biarkan tombol login */
+    .footer {
+        flex-direction: column;
+        text-align: center;
+    }
+}
