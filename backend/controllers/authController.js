@@ -1,4 +1,3 @@
-// backend/controllers/authController.js
 const { createClient } = require('@supabase/supabase-js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');

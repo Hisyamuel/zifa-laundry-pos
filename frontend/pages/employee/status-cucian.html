@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <style>
-        /* Gaya khusus untuk Papan Kanban */
+        
         .kanban-board {
             display: flex;
             gap: 20px;
@@ -47,10 +47,8 @@
             color: var(--tx);
         }
 
-        /* Penyesuaian Card agar sama dengan halaman lain */
         .k-card {
             background: var(--sf);
-            /* Latar belakang biru tua samar */
             border: 1px solid var(--ln);
             border-radius: 9px;
             padding: 16px;
@@ -90,7 +88,6 @@
         .k-card:hover {
             border-color: var(--ink-hover);
             box-shadow: 0 0 0 1px var(--ink-hover);
-            /* Memberikan ketegasan efek outline */
         }
 
         .k-card .resi {
@@ -120,7 +117,6 @@
 
         .k-btn:hover {
             background: rgba(59, 130, 246, 0.1);
-            /* Latar biru sangat samar */
             border-color: var(--ink-hover);
         }
     </style>
@@ -134,7 +130,9 @@
             <a href="pesanan-baru.html" class="menu-link">Pesanan Baru</a>
             <a href="status-cucian.html" class="menu-link on">Status Cucian</a>
             <a href="riwayat.html" class="menu-link">Riwayat Transaksi</a>
+
             <a href="/frontend/pages/auth/auth.html" class="menu-link logout-btn">Keluar</a>
+            
             <div class="who">Employee · Pegawai</div>
         </aside>
 

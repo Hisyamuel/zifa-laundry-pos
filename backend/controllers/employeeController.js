@@ -1,10 +1,9 @@
-// backend/controllers/employeeController.js
 const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
-// GET: Ambil daftar semua pegawai (beserta relasi email dari tabel users jika ada)
-const getEmployees = async (req, res) => {
+// GET: Ambil daftar semua pegawai 
+const getEmployees = async (_req, res) => {
     try {
         // Menggunakan join ke tabel users untuk mendapatkan email
         const { data, error } = await supabase
@@ -43,7 +42,7 @@ const approveEmployee = async (req, res) => {
     try {
         const { error } = await supabase
             .from('employee')
-            .update({ account_status: 'Aktif' }) // Harus sama persis dengan aturan database
+            .update({ account_status: 'Aktif' }) 
             .eq('employee_id', id);
 
         if (error) throw error;

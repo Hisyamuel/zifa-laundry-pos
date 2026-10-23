@@ -1,4 +1,3 @@
-// Tambahkan fungsi utilitas ini di utils.js
 function escapeHTML(str) {
     if (str === null || str === undefined) return '';
     return str.toString()

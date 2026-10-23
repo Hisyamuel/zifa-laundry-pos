@@ -1,4 +1,3 @@
-// backend/controllers/dashboardController.js
 const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -96,13 +95,13 @@ const getDashboardStats = async (_req, res) => {
             }
         });
 
-        // Konversi ke persentase untuk tinggi bar (menggunakan 100% relatif terhadap hari tertinggi)
+        // Konversi ke persentase untuk tinggi bar 
         const chart7Hari = Object.values(chartDataMap).map(item => {
             const persentase = maxDailyRevenue === 0 ? 0 : Math.round((item.total / maxDailyRevenue) * 100);
             return {
                 hari: item.hari,
                 persentase: persentase,
-                rawTotal: item.total // Opsi tambahan
+                rawTotal: item.total 
             };
         });
 
@@ -111,7 +110,7 @@ const getDashboardStats = async (_req, res) => {
             data: {
                 stats: {
                     pendapatanHariIni: pendapatanHariIni,
-                    pesananMasuk: pesananMasuk, // Ini yang akan kita pakai sebagai jumlah transaksi
+                    pesananMasuk: pesananMasuk, 
                     dalamProses: resProses.count || 0,
                     siapDiambil: resSiap.count || 0
                 },

@@ -1,4 +1,3 @@
-// backend/controllers/serviceController.js
 const { createClient } = require('@supabase/supabase-js');
 const { v4: uuidv4 } = require('uuid');
 
@@ -13,7 +12,7 @@ const getServices = async (_req, res) => {
         const { data, error } = await supabase
             .from('layanan')
             .select('*')
-            .order('service_name', { ascending: true }); // Opsional: mengurutkan abjad
+            .order('service_name', { ascending: true }); 
 
         if (error) throw error;
         return res.status(200).json({ status: 'success', data: data });

@@ -1,6 +1,4 @@
-// backend/middlewares/errorHandler.js
-
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, _req, res, _next) => {
     console.error('Terjadi Kesalahan Global:', err.stack);
 
     // Format standar balasan error untuk frontend

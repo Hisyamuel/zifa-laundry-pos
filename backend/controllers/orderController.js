@@ -1,4 +1,3 @@
-// backend/controllers/orderController.js
 const { createClient } = require('@supabase/supabase-js');
 const dayjs = require('dayjs');
 
@@ -110,7 +109,7 @@ const createOrder = async (req, res) => {
     const { pelanggan, no_hp, layanan_id, kuantitas, total_biaya, metode_bayar } = req.body;
 
     try {
-        // 1. Cek atau Tambah Customer
+        // Cek atau Tambah Customer
         let customerId;
         const { data: existCust, error: errCust } = await supabase
             .from('customer')
@@ -134,7 +133,7 @@ const createOrder = async (req, res) => {
             customerId = existCust.customer_id;
         }
 
-        // 2. Format Metode Bayar 
+        // Format Metode Bayar 
         const methodMap = {
             'tunai': 'Tunai',
             'transfer': 'Transfer',
@@ -142,7 +141,7 @@ const createOrder = async (req, res) => {
         };
         const formattedPaymentMethod = methodMap[metode_bayar ? metode_bayar.toLowerCase() : 'tunai'] || 'Tunai';
 
-        // 3. LOGIKA CERDAS: Cek Nama Layanan untuk Penentuan Status Awal
+        // Cek Nama Layanan untuk Penentuan Status Awal
         let initialStatus = 'Dicuci';
         const { data: svcData } = await supabase
             .from('layanan')
@@ -150,25 +149,25 @@ const createOrder = async (req, res) => {
             .eq('service_id', layanan_id)
             .maybeSingle();
 
-        // Jika layanan yang dipilih adalah "Setrika Saja", langsung masuk kolom Disetrika
-        if (svcData && svcData.service_name.toLowerCase().includes('setrika saja')) {
-            initialStatus = 'Disetrika';
+        // Jika layanan yang dipilih adalah "Cuci Saja", langsung masuk kolom Dicuci
+        if (svcData && svcData.service_name.toLowerCase().includes('cuci saja')) {
+            initialStatus = 'Dicuci';
         }
 
-        // 4. Generate ID Unik
+        // Generate ID Unik
         const generatedOrderId = 'ORD-' + Date.now();
         const timestamp = Date.now().toString().slice(-4);
         const randomStr = Math.random().toString(36).substring(2, 5).toUpperCase();
         const resiNumber = `ZL-${timestamp}${randomStr}`;
 
-        // 5. Insert ke Tabel Pesanan menggunakan initialStatus
+        // Insert ke Tabel Pesanan menggunakan initialStatus
         const { data: order, error: orderErr } = await supabase
             .from('pesanan')
             .insert([{
                 order_id: generatedOrderId,
                 resi_number: resiNumber,
                 transaction_date: new Date().toISOString(),
-                laundry_status: initialStatus, // Memasukkan status dinamis di sini
+                laundry_status: initialStatus, 
                 payment_status: 'Lunas',
                 payment_method: formattedPaymentMethod,
                 total_cost: total_biaya,
@@ -179,7 +178,7 @@ const createOrder = async (req, res) => {
 
         if (orderErr) throw orderErr;
 
-        // 6. Insert ke Detail Transaksi (Tanpa kolom notes)
+        // Insert ke Detail Transaksi (Tanpa kolom notes)
         const generatedDetailId = 'DTL-' + Date.now();
         const { error: detailErr } = await supabase
             .from('detail_transaksi')
@@ -208,7 +207,7 @@ const createOrder = async (req, res) => {
     }
 };
 
-// PATCH: Perbarui status cucian
+// Perbarui status cucian
 const updateLaundryStatus = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;

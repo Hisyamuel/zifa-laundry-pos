@@ -1,5 +1,3 @@
-// frontend/js/pages/auth/auth.js
-
 document.addEventListener("DOMContentLoaded", () => {
     const tabLogin = document.getElementById("tab-login");
     const tabRegister = document.getElementById("tab-register");
@@ -10,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const formTrack = document.getElementById("form-track");
     const formWrapper = document.querySelector(".form-slider-wrapper");
 
-    // --- SISTEM TOAST (Pengganti Alert) ---
+    // --- SISTEM TOAST (Notifikasi) ---
     function showToast(message, type = 'success') {
         let container = document.querySelector('.toast-container');
         if (!container) {
@@ -84,10 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- Pola Regex ---
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    // PERBAIKAN REGEX: Mewajibkan tiap kata diawali huruf besar, tapi toleran terhadap spasi ganda/tanda baca
+    // REGEX: Mewajibkan tiap kata diawali huruf besar, tapi toleran terhadap spasi ganda/tanda baca
     const capitalizeNameRegex = /^([A-Z][^\s]*\s*)+$/;
 
-    // --- 1. PROSES LOGIN ---
+    // --- PROSES LOGIN ---
     formLogin.addEventListener("submit", async (e) => {
         e.preventDefault();
         clearAllErrors();
@@ -144,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // --- 2. PROSES DAFTAR (EMPLOYEE) ---
+    // --- PROSES DAFTAR (EMPLOYEE) ---
     formRegister.addEventListener("submit", async (e) => {
         e.preventDefault();
         clearAllErrors();
@@ -171,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch('http://localhost:3000/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password, phone }) // Kirim no telepon ke backend
+                body: JSON.stringify({ name, email, password, phone }) 
             });
 
             const result = await response.json();

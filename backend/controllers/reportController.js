@@ -1,4 +1,3 @@
-// backend/controllers/reportController.js
 const { createClient } = require('@supabase/supabase-js');
 const dayjs = require('dayjs');
 const isoWeek = require('dayjs/plugin/isoWeek');
@@ -9,14 +8,14 @@ const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const getFinancialReport = async (req, res) => {
-    let { period, date } = req.query; // period: 'harian', 'mingguan', 'bulanan'. date: YYYY-MM-DD (opsional)
+    let { period, date } = req.query; // period: 'harian', 'mingguan', 'bulanan'
 
     if (!period) period = 'mingguan'; // Default mingguan
 
     let startDate, endDate;
     const baseDate = date ? dayjs(date) : dayjs();
 
-    // 1. Tentukan Rentang Waktu (startDate dan endDate)
+    // Menentukan Rentang Waktu (startDate dan endDate)
     if (period === 'harian') {
         startDate = baseDate.startOf('day').toISOString();
         endDate = baseDate.endOf('day').toISOString();
@@ -32,7 +31,7 @@ const getFinancialReport = async (req, res) => {
     }
 
     try {
-        // 2. Ambil data pesanan dalam rentang waktu tersebut
+        // Mengambil data pesanan dalam rentang waktu tersebut
         const { data: orders, error } = await supabase
             .from('pesanan')
             .select('transaction_date, total_cost')
@@ -42,7 +41,7 @@ const getFinancialReport = async (req, res) => {
 
         if (error) throw error;
 
-        // 3. Kalkulasi Metrik Utama
+        // Kalkulasi Metrik Utama
         let totalRevenue = 0;
         const transactionCount = orders.length;
 
@@ -52,11 +51,11 @@ const getFinancialReport = async (req, res) => {
 
         const averagePerTransaction = transactionCount > 0 ? (totalRevenue / transactionCount) : 0;
 
-        // 4. Kelompokkan Data untuk Tabel (Rincian Transaksi)
+        // Mengelompokkan Data untuk Tabel (Rincian Transaksi)
         let groupedData = [];
 
         if (period === 'harian') {
-            // Kelompokkan per sesi waktu: Pagi (08-12), Siang (12-16), Sore (16-20)
+            // Mengelompokkan per sesi waktu: Pagi (08-12), Siang (12-16), Sore (16-20), Malam (20-24)
             const sessions = { pagi: { count: 0, sum: 0 }, siang: { count: 0, sum: 0 }, sore: { count: 0, sum: 0 }, malam: { count: 0, sum: 0 } };
 
             orders.forEach(order => {
@@ -75,7 +74,7 @@ const getFinancialReport = async (req, res) => {
             ];
 
         } else if (period === 'mingguan') {
-            // Kelompokkan per hari (Senin - Minggu)
+            // Mengelompokkan per hari (Senin - Minggu)
             const daysMap = {};
             // Inisialisasi hari dalam seminggu
             for (let i = 0; i < 7; i++) {
@@ -91,7 +90,7 @@ const getFinancialReport = async (req, res) => {
                 }
             });
 
-            // Ubah object ke array untuk frontend (urutkan dari terbaru)
+            // Ubah object ke array untuk frontend (mengurutkan dari terbaru)
             groupedData = Object.keys(daysMap).reverse().map(key => ({
                 label: key,
                 count: daysMap[key].count,
@@ -99,8 +98,8 @@ const getFinancialReport = async (req, res) => {
             }));
 
         } else if (period === 'bulanan') {
-            // Kelompokkan per minggu (Minggu 1, 2, 3, 4)
-            // Sederhananya, bagi bulan menjadi 4 segmen (1-7, 8-14, 15-21, 22-akhir)
+            // Mengelompokkan per minggu (Minggu 1, 2, 3, 4)
+            // Bagi bulan menjadi 4 segmen (1-7, 8-14, 15-21, 22-akhir)
             const weeks = { w1: { count: 0, sum: 0 }, w2: { count: 0, sum: 0 }, w3: { count: 0, sum: 0 }, w4: { count: 0, sum: 0 } };
             const monthName = baseDate.format('MMM');
             const endOfMonth = baseDate.endOf('month').date();
@@ -121,7 +120,7 @@ const getFinancialReport = async (req, res) => {
             ];
         }
 
-        // 5. Susun format tanggal untuk ditampilkan di UI (misal: "01 Nov - 07 Nov 2026")
+        // Susun format tanggal untuk ditampilkan di UI (contoh: "01 Nov - 07 Nov 2026")
         let displayDateRange = '';
         if (period === 'harian') {
             displayDateRange = baseDate.format('DD MMM YYYY');
@@ -131,7 +130,7 @@ const getFinancialReport = async (req, res) => {
             displayDateRange = baseDate.format('MMMM YYYY');
         }
 
-        // 6. Response Payload
+        // Response Payload
         const responseData = {
             summary: {
                 totalRevenue,
@@ -158,7 +157,7 @@ const exportFinancialReport = async (req, res) => {
     let startDate, endDate;
     const baseDate = date ? dayjs(date) : dayjs();
 
-    // 1. Tentukan Rentang Waktu
+    // Menentukan Rentang Waktu
     if (period === 'harian') {
         startDate = baseDate.startOf('day').toISOString();
         endDate = baseDate.endOf('day').toISOString();
@@ -173,7 +172,7 @@ const exportFinancialReport = async (req, res) => {
     }
 
     try {
-        // 2. Ambil data pesanan
+        // Mengambil data pesanan
         const { data: orders, error } = await supabase
             .from('pesanan')
             .select('transaction_date, total_cost')
@@ -187,7 +186,7 @@ const exportFinancialReport = async (req, res) => {
         let labelHeader = '';
         let dateRangeStr = '';
 
-        // 3. Kelompokkan Data (Sama persis dengan getFinancialReport)
+        // Mengelompokkan Data (Sama seperti getFinancialReport)
         if (period === 'harian') {
             labelHeader = 'Sesi Waktu';
             dateRangeStr = baseDate.format('DD_MMM_YYYY');
@@ -252,7 +251,7 @@ const exportFinancialReport = async (req, res) => {
             ];
         }
 
-        // 4. Susun Format CSV
+        // Susun Format CSV
         // Header
         let csvString = `"${labelHeader}";"Jumlah Transaksi";"Pendapatan"\n`;
 
@@ -261,7 +260,7 @@ const exportFinancialReport = async (req, res) => {
             csvString += `"${row.label}";"${row.count}";"${row.revenue}"\n`;
         });
 
-        // 5. Atur Header Response agar Browser Mengunduhnya sebagai File
+        // Mengatur Header Response agar Browser Mengunduhnya sebagai File
         const fileName = `Laporan_ZifaLaundry_${period}_${dateRangeStr}.csv`;
         res.setHeader('Content-Type', 'text/csv');
         res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);

@@ -1,24 +1,21 @@
-// frontend/js/pages/owner/laporan.js
-
 let currentPeriod = 'harian';
-let currentDate = ''; // Format YYYY-MM-DD, kosong = hari ini
+let currentDate = ''; 
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Inisialisasi awal
+    // Inisialisasi awal
     fetchReportData();
 
-    // Pastikan slider terposisi setelah layout browser stabil (render awal)
     requestAnimationFrame(() => updateSlider());
-    window.addEventListener('resize', updateSlider); // Jaga-jaga jika ukuran layar diubah
+    window.addEventListener('resize', updateSlider); 
 
-    // 2. Event Listener Filter Tab (Harian, Mingguan, Bulanan)
+    // Event Listener Filter Tab (Harian, Mingguan, Bulanan)
     const tabs = document.querySelectorAll('#tab-filter button');
     tabs.forEach(tab => {
         tab.addEventListener('click', function () {
             // Abaikan jika menekan tab yang sudah aktif
             if (this.classList.contains('on')) return;
 
-            // Pindahkan class 'on'
+            // Pindah ke class 'on'
             tabs.forEach(t => t.classList.remove('on'));
             this.classList.add('on');
 
@@ -29,16 +26,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Event Listener Date Picker
+    // Event Listener Date Picker
     const datePicker = document.getElementById('date-picker');
     datePicker.valueAsDate = new Date(); // Set default ke hari ini
 
     datePicker.addEventListener('change', function () {
         currentDate = this.value; // YYYY-MM-DD
-        loadDataWithAnimation();  // Jalankan animasi fade & muat data baru
+        loadDataWithAnimation();  
     });
 
-    // 4. Event Listener Tombol Unduh Laporan
+    // Event Listener Tombol Unduh Laporan
     document.getElementById('btn-unduh').addEventListener('click', downloadCSV);
 });
 
@@ -58,14 +55,14 @@ function updateSlider() {
 function loadDataWithAnimation() {
     const content = document.getElementById('report-content');
 
-    // Langkah 1: Fade Out (Sembunyikan konten secara halus)
+    // Fade Out (Sembunyikan konten secara halus)
     content.classList.add('hidden');
 
-    // Langkah 2: Tunggu 300ms (Sesuai durasi CSS transition), lalu muat data
+    // Tunggu 300ms (Sesuai durasi CSS transition), lalu muat data
     setTimeout(async () => {
         await fetchReportData(); // Panggil data dari backend
 
-        // Langkah 3: Fade In (Tampilkan kembali konten secara halus)
+        // Fade In (Tampilkan kembali konten secara halus)
         content.classList.remove('hidden');
     }, 100);
 }

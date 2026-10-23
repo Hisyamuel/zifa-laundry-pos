@@ -34,7 +34,6 @@
             background: url("/frontend/public/images/jemuran.jpeg") no-repeat center center fixed;
             background-size: cover;
             opacity: 0.2;
-            /* Mendorong gambar ke posisi paling belakang agar tidak menutupi form */
             z-index: -1;
         }
 
@@ -126,7 +125,6 @@
             display: block;
         }
 
-        /* Wadah pembungkus agar form tidak keluar jalur (overflow) */
         .form-slider-wrapper {
             overflow: hidden;
             width: 100%;
@@ -137,12 +135,10 @@
         .form-slider-track {
             display: flex;
             width: 200%;
-            /* Lebar 200% karena memuat dua form */
             transition: transform 0.4s ease-in-out;
             align-items: flex-start;
         }
 
-        /* Pengaturan masing-masing form menjadi 50% dari total panjang track */
         .form-section {
             width: 50%;
             box-sizing: border-box;
@@ -188,7 +184,7 @@
 
         <div class="form-slider-wrapper">
             <div class="form-slider-track" id="form-track">
-                <!-- FORM LOGIN (Tanpa 'novalidate' agar tooltip HTML5 menyala) -->
+                <!-- FORM LOGIN -->
                 <form id="form-login" class="form-section active">
                     <label class="f">
                         Masuk sebagai
@@ -221,7 +217,7 @@
                     <a class="btn-link" href="/frontend/pages/index.html">← Kembali ke Beranda</a>
                 </form>
 
-                <!-- FORM REGISTER (Tanpa 'novalidate') -->
+                <!-- FORM REGISTER -->
                 <form id="form-register" class="form-section">
                     <label class="f">
                         Nama lengkap (Wajib diawali Huruf Kapital)

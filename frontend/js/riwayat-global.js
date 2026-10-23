@@ -1,5 +1,3 @@
-// frontend/js/pages/riwayat-global.js
-
 document.addEventListener('DOMContentLoaded', () => {
     // Muat data awal tanpa filter
     fetchRiwayat();
@@ -9,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchRiwayat();
     });
 
-    // Opsional: Pencarian otomatis saat mengetik di kolom pencarian (diberi jeda agar tidak spam API)
+    // Pencarian otomatis saat mengetik di kolom pencarian (diberi jeda agar tidak spam API)
     let timeoutId;
     document.getElementById('input-search').addEventListener('input', () => {
         clearTimeout(timeoutId);
@@ -47,11 +45,11 @@ function getStatusBadgeClass(status) {
         case 'Dicuci':
         case 'Dikeringkan':
         case 'Disetrika':
-            return 'bd o'; // Outline biasa
+            return 'bd o'; 
         case 'Siap Ambil':
-            return 'bd o text-blue border-blue'; // Outline biru
+            return 'bd o text-blue border-blue'; 
         case 'Selesai':
-            return 'bd k'; // Kotak Solid Biru
+            return 'bd k'; 
         default:
             return 'bd o';
     }

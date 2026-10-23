@@ -1,4 +1,4 @@
-// PERBAIKAN 1: Deklarasi variabel global untuk menyimpan ID layanan yang akan dihapus
+// Deklarasi variabel global untuk menyimpan ID layanan yang akan dihapus
 let serviceIdToDelete = null;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listener untuk tombol Batal Edit
     document.getElementById('btn-cancel-edit').addEventListener('click', resetFormMode);
 
-    // PERBAIKAN 2: Daftarkan Event Listener untuk tombol di dalam Modal Hapus
+    // Event Listener untuk tombol di dalam Modal Hapus
     document.getElementById('btn-cancel-delete').addEventListener('click', closeDeleteModal);
     document.getElementById('btn-confirm-delete').addEventListener('click', executeDelete);
 });
@@ -35,7 +35,7 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-// === 1. READ: Tampilkan Data ===
+// === READ: Tampilkan Data ===
 async function fetchServices() {
     try {
         const response = await fetch('http://localhost:3000/api/services');
@@ -71,7 +71,7 @@ function renderTable(data) {
     });
 }
 
-// === 2. CREATE & UPDATE: Submit Form ===
+// === CREATE & UPDATE: Submit Form ===
 async function handleFormSubmit(e) {
     e.preventDefault();
 
@@ -86,9 +86,9 @@ async function handleFormSubmit(e) {
         rate: parseInt(rate)
     };
 
-    // Tangkap elemen tombol dan ubah state-nya menjadi loading
+    // Menangkap elemen tombol dan mengubah state-nya menjadi loading
     const btnSubmit = document.getElementById('btn-submit-layanan');
-    const originalText = btnSubmit.textContent; // Bisa "Simpan layanan" atau "Perbarui Layanan"
+    const originalText = btnSubmit.textContent; // "Simpan layanan" atau "Perbarui Layanan"
     btnSubmit.textContent = 'Memproses...';
     btnSubmit.disabled = true;
 
@@ -120,20 +120,20 @@ async function handleFormSubmit(e) {
         showToast('Gagal menghubungi server', 'error');
         console.error(error); 
     } finally {
-        // Kembalikan teks dan aktifkan tombol kembali setelah selesai
+        // Mengembalikan teks dan mengaktifkan tombol kembali setelah selesai
         btnSubmit.textContent = originalText;
         btnSubmit.disabled = false;
     }
 }
 
-// === 3. UPDATE (Prep): Persiapan Mode Edit ===
+// === UPDATE (Prep): Persiapan Mode Edit ===
 window.editMode = function (id, name, type, rate) {
     document.getElementById('service-id-hidden').value = id;
     document.getElementById('input-nama').value = name;
     document.getElementById('select-tipe').value = type;
     document.getElementById('input-tarif').value = rate;
 
-    // Ubah teks tombol dan tampilkan tombol batal
+    // Mengubah teks tombol dan menampilkan tombol batal
     document.getElementById('btn-submit-layanan').textContent = 'Perbarui Layanan';
     document.getElementById('btn-cancel-edit').style.display = 'block';
 };
@@ -146,14 +146,14 @@ function resetFormMode() {
     document.getElementById('btn-cancel-edit').style.display = 'none';
 }
 
-// === 4. DELETE: Hapus Data ===
+// === DELETE: Hapus Data ===
 window.openDeleteModal = function (id, name) {
     serviceIdToDelete = id; 
     document.getElementById('delete-service-name').textContent = name;
     
     const modal = document.getElementById('delete-modal');
     modal.style.display = 'flex'; 
-    // Tambahkan delay kecil agar animasi CSS sempat berjalan
+    
     setTimeout(() => modal.classList.add('show-modal'), 10);
 };
 
@@ -173,7 +173,7 @@ function closeDeleteModal() {
 async function executeDelete() {
     if (!serviceIdToDelete) return;
 
-    // Tambahkan efek loading pada tombol agar pengguna tahu proses sedang berjalan
+    // Menambahkan efek loading pada tombol agar pengguna tahu proses sedang berjalan
     const btnConfirm = document.getElementById('btn-confirm-delete');
     const originalText = btnConfirm.textContent;
     btnConfirm.textContent = 'Menghapus...';
@@ -194,7 +194,6 @@ async function executeDelete() {
     } catch (error) {
         showToast('Gagal menghubungi server', 'error');
     } finally {
-        // Kembalikan kondisi tombol dan tutup modal
         btnConfirm.textContent = originalText;
         btnConfirm.disabled = false;
         closeDeleteModal(); 

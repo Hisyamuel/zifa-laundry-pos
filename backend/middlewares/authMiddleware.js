@@ -1,4 +1,3 @@
-// backend/middlewares/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const { createClient } = require('@supabase/supabase-js');
 const JWT_SECRET = process.env.JWT_SECRET || 'rahasia_zifa_laundry_super_aman';

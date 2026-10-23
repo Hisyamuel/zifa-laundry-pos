@@ -1,5 +1,3 @@
-/* frontend/css/components.css */
-
 /* Gaya Dasar Tombol (Button) */
 .b {
     border: 1px solid var(--ln);
@@ -9,7 +7,6 @@
     font-weight: 600;
     cursor: pointer;
     color: var(--tx);
-    /* Pastikan warna teks mengikuti tema gelap */
 }
 
 /* Tombol Utama (Primary Button) - Warna Biru */
@@ -116,12 +113,10 @@
     background-color: #10b981;
 }
 
-/* Hijau */
+
 .toast.error {
     background-color: #ef4444;
 }
-
-/* Merah */
 
 /* --- CUSTOM MODAL --- */
 .modal-overlay {
@@ -181,7 +176,6 @@
 
 .badge {
     background-color: #3b82f6;
-    /* Warna utama Zifa */
     color: white;
     font-size: 14px;
     padding: 2px 8px;

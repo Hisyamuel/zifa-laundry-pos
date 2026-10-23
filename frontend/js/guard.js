@@ -1,10 +1,7 @@
-// frontend/js/guard.js
-
 // === 1. INTERCEPTOR FETCH GLOBAL (Mengawasi Semua Request API) ===
-// Diletakkan di luar agar langsung aktif sebelum halaman sepenuhnya dimuat
 const originalFetch = window.fetch;
 
-// --- SISTEM TOAST (Pengganti Alert) ---
+// --- SISTEM TOAST (Notifikasi) ---
 function showToast(message, type = 'success') {
     let container = document.querySelector('.toast-container');
     if (!container) {
@@ -44,7 +41,7 @@ window.fetch = async function (...args) {
     // Lanjutkan pengiriman ke backend
     const response = await originalFetch(url, options);
 
-    // Jika backend memblokir (401/403) dan ini BUKAN proses mendaftar/login awal
+    // Jika backend memblokir (401/403) 
     if ((response.status === 401 || response.status === 403) && typeof url === 'string' && !url.includes('/api/auth/')) {
         showToast("Akses ditolak: Akun Anda telah dinonaktifkan atau dihapus.", 'error');
         localStorage.clear(); 
@@ -65,14 +62,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const role = localStorage.getItem('role');
     const currentPath = window.location.pathname;
 
-    // A. Cek keberadaan sesi
+    // Cek keberadaan sesi
     if (!token && !currentPath.includes('/auth/auth.html')) {
         showToast("Sesi Anda telah habis atau Anda belum login.", 'error');
         window.location.href = '/frontend/pages/auth/auth.html';
         return;
     }
 
-    // B. Cek silang kepemilikan halaman (Role)
+    // Cek silang kepemilikan halaman (Role)
     if (currentPath.includes('/owner/') && role !== 'Owner') {
         showToast("Akses Ditolak! Halaman ini khusus Pemilik (Owner).", 'error');
         window.location.href = role === 'Employee' ? '/frontend/pages/employee/pesanan-baru.html' : '/frontend/pages/auth/auth.html';
@@ -82,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = role === 'Owner' ? '/frontend/pages/owner/dashboard.html' : '/frontend/pages/auth/auth.html';
     }
 
-    // C. Sistem tombol Logout Manual
+    // Sistem tombol Logout Manual
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('logout-btn')) {
             e.preventDefault();

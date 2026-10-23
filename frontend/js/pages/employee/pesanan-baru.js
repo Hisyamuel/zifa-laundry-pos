@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
-    // 1. DEKLARASI ELEMEN DOM
+    // DEKLARASI ELEMEN DOM
     // ==========================================
     const formPesanan = document.getElementById("form-pesanan");
     const selectLayanan = document.getElementById("layanan");
@@ -15,15 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnLogout = document.querySelector(".logout-btn");
 
     // ==========================================
-    // 2. STATE ATAU VARIABEL GLOBAL
+    // STATE ATAU VARIABEL GLOBAL
     // ==========================================
     let totalBiaya = 0;
     let selectedMethod = "tunai";
     let layananList = [];
-    let lastSavedOrder = null; // Menyimpan data transaksi terakhir untuk resi digital WA
+    let lastSavedOrder = null; 
 
     // ==========================================
-    // 3. HELPER & UTILITY FUNCTIONS
+    // HELPER & UTILITY FUNCTIONS
     // ==========================================
 
     // Custom Toast Notification
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // 4. ASYNC FUNCTIONS
+    // ASYNC FUNCTIONS
     // ==========================================
     async function fetchLayanan() {
         try {
@@ -246,11 +246,9 @@ document.addEventListener("DOMContentLoaded", () => {
             showToast("Koneksi terputus, memuat data layanan cadangan.", "error");
 
             const dummyData = [
-                { service_id: "L01", service_name: "Bedcover", type: "Satuan", rate: 25000 },
-                { service_id: "L02", service_name: "Cuci Kering", type: "Kiloan", rate: 8000 },
-                { service_id: "L03", service_name: "Cuci Kering + Setrika", type: "Kiloan", rate: 13000 },
-                { service_id: "L04", service_name: "Jas", type: "Satuan", rate: 20000 },
-                { service_id: "L05", service_name: "Setrika Saja", type: "Kiloan", rate: 5000 }
+                { service_id: "L01", service_name: "Cuci Kering", type: "Kiloan", rate: 10000 },
+                { service_id: "L02", service_name: "Cuci Kering + Setrika", type: "Kiloan", rate: 15000 },
+                { service_id: "L03", service_name: "Cuci Saja", type: "Kiloan", rate: 8000 }
             ];
             layananList = dummyData;
             renderLayananOptions(layananList);
@@ -265,7 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Animasi teks tombol & matikan tombol selama proses berlangsung
         const originalBtnText = btnSimpanCetak.textContent;
         btnSimpanCetak.disabled = true;
         btnSimpanCetak.textContent = "Memproses...";
@@ -345,7 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // 5. INISIALISASI & EVENT LISTENERS
+    // INISIALISASI & EVENT LISTENERS
     // ==========================================
     if (btnLogout) {
         btnLogout.addEventListener("click", (e) => {

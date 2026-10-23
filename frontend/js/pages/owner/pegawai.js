@@ -1,5 +1,3 @@
-// frontend/js/pages/owner/pegawai.js
-
 let currentEmployeeId = null;
 let targetStatus = null; // Bisa berisi: 'Aktif', 'Nonaktif', atau 'Tolak'
 
@@ -154,9 +152,8 @@ window.openStatusModal = function (id, name, nextStatus) {
     btnConfirm.style.borderColor = nextStatus === 'Nonaktif' ? '#ef4444' : '#3b82f6';
     btnConfirm.textContent = 'Ya, Ubah Status';
 
-    // Gunakan class untuk animasi, hapus inline display
     const modal = document.getElementById('status-modal');
-    modal.style.display = 'flex'; // Pastikan display flex aktif sebelum animasi
+    modal.style.display = 'flex'; 
     setTimeout(() => modal.classList.add('show-modal'), 10);
 };
 
@@ -198,7 +195,7 @@ async function executeStatusChange() {
         let url = '';
         let options = { headers: { 'Content-Type': 'application/json' } };
 
-        // Route Cerdas: Pisahkan DELETE dan PUT
+        // Route: Memisahkan DELETE dan PUT
         if (targetStatus === 'Tolak') {
             url = `http://localhost:3000/api/employees/${currentEmployeeId}/reject`;
             options.method = 'DELETE';

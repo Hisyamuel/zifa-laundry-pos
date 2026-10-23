@@ -5,11 +5,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fungsi Logika Penentuan Status Berikutnya Berdasarkan Nama Layanan
     function getNextStatus(currentStatus, namaLayanan) {
+        const isKering = namaLayanan.toLowerCase().includes('kering');
         const isSetrika = namaLayanan.toLowerCase().includes('setrika');
 
         switch (currentStatus) {
             case 'Dicuci':
-                return 'Dikeringkan';
+                return isKering ? 'Dikeringkan' : 'Siap Ambil';
             case 'Dikeringkan':
                 return isSetrika ? 'Disetrika' : 'Siap Ambil';
             case 'Disetrika':
@@ -45,7 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (el) el.innerHTML = '';
         });
 
-        // PISAHKAN LOGIKA UNTUK KOLOM SELESAI
         const activeOrders = orders.filter(o => o.status !== 'Selesai');
         const finishedOrders = orders.filter(o => o.status === 'Selesai');
 
@@ -83,8 +83,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Setel total asli (termasuk yang disembunyikan) untuk badge "Selesai" jika ingin akurat, 
-        // atau gunakan angka dari yang tertampil saja.
         counts['Selesai'] = finishedOrders.length;
 
         // Reset pelacak animasi setelah render selesai
@@ -101,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fungsi Global untuk Tombol Pindah Status
     window.updateOrderStatus = async function (orderId, nextStatus, btnElement) {
-        // 1. Eksekusi Animasi Fade Out pada kartu saat ini
+        // Eksekusi Animasi Fade Out pada kartu saat ini
         if (btnElement) {
             const card = btnElement.closest('.k-card');
             if (card) {
@@ -110,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            // Lakukan pembaruan di server secara asinkron
+            // Melakukan pembaruan di server secara asinkron
             const response = await fetch(`/api/orders/${orderId}/status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
@@ -122,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (result.status === 'success') {
                 lastMovedOrderId = orderId;
 
-                // Beri waktu 250ms agar animasi fade out terlihat sempurna sebelum re-render papan kanban
+                // Memberi waktu 250ms agar animasi fade out terlihat sempurna sebelum re-render papan kanban
                 setTimeout(() => {
                     fetchKanbanData();
                 }, 250);

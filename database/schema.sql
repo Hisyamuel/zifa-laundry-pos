@@ -1,5 +1,4 @@
 -- 1. Tabel Users (Kredensial Login)
--- Catatan: Jika menggunakan Supabase Auth terintegrasi, Anda bisa me-link id dengan auth.users
 CREATE TABLE users (
     user_id VARCHAR(50) PRIMARY KEY,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -38,7 +37,6 @@ CREATE TABLE layanan (
 );
 
 -- 6. Tabel Pesanan (Orders)
--- Menyertakan metode pembayaran berdasarkan wireframe (Tunai/Transfer/QRIS)
 CREATE TABLE pesanan (
     order_id VARCHAR(50) PRIMARY KEY,
     resi_number VARCHAR(50) UNIQUE NOT NULL,

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 async function initDashboard() {
     try {
-        // Sesuaikan PORT dengan konfigurasi server Node.js lokal Anda (misal: 3000)
+        // Sesuaikan PORT dengan konfigurasi server Node.js lokal 
         const response = await fetch('http://localhost:3000/api/dashboard');
         
         if (!response.ok) {
@@ -24,7 +24,6 @@ async function initDashboard() {
         
     } catch (error) {
         console.error('Gagal memuat data dasbor:', error);
-        // Fallback opsional: Anda bisa memunculkan notifikasi error ke user di sini
     }
 }
 
@@ -52,7 +51,6 @@ function renderStats(stats) {
 
         // Kartu 2: Pesanan Masuk
         statCards[1].querySelector('b').textContent = stats.pesananMasuk;
-        // statCards[1].querySelector('em').textContent = 'hari ini'; (Bisa dibiarkan statis)
 
         // Kartu 3: Dalam Proses
         statCards[2].querySelector('b').textContent = stats.dalamProses;
@@ -69,7 +67,7 @@ function renderChart(chartData) {
     const barsContainer = document.querySelector('.bars');
     if (!barsContainer) return;
 
-    barsContainer.innerHTML = ''; // Kosongkan elemen statis bawaan HTML
+    barsContainer.innerHTML = ''; 
     
     chartData.forEach(item => {
         const barDiv = document.createElement('div');
@@ -84,7 +82,7 @@ function renderChart(chartData) {
 function renderRecentTransactions(transactions) {
     const tbody = document.querySelector('.tw tbody');
 
-    tbody.innerHTML = ''; // Kosongkan elemen statis bawaan HTML
+    tbody.innerHTML = ''; 
     if (transactions.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Tidak ada transaksi ditemukan.</td></tr>';
         return;
