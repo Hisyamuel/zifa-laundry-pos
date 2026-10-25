@@ -12,7 +12,7 @@ CREATE TABLE owner (
     name VARCHAR(100) NOT NULL
 );
 
--- 3. Tabel Employee (Terdapat penambahan 'account_status')
+-- 3. Tabel Employee 
 CREATE TABLE employee (
     employee_id VARCHAR(50) PRIMARY KEY REFERENCES users(user_id) ON DELETE CASCADE,
     name VARCHAR(100) NOT NULL,
@@ -46,10 +46,11 @@ CREATE TABLE pesanan (
     payment_method VARCHAR(20) CHECK (payment_method IN ('Tunai', 'Transfer', 'QRIS')),
     total_cost DECIMAL(10,2) NOT NULL DEFAULT 0,
     employee_id VARCHAR(50) REFERENCES employee(employee_id),
-    customer_id VARCHAR(50) REFERENCES customer(customer_id)
+    customer_id VARCHAR(50) REFERENCES customer(customer_id),
+    completed_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW()
 );
 
--- 7. Tabel Detail Pesanan
+-- 7. Tabel Detail Transaksi (Order Details)
 CREATE TABLE detail_transaksi (
     order_detail_id VARCHAR(50) PRIMARY KEY,
     order_id VARCHAR(50) REFERENCES pesanan(order_id) ON DELETE CASCADE,

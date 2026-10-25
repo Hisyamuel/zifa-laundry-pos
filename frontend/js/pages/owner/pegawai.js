@@ -167,6 +167,7 @@ window.openRejectModal = function (id, name) {
     const btnConfirm = document.getElementById('btn-confirm-modal');
     btnConfirm.style.backgroundColor = '#ef4444';
     btnConfirm.style.borderColor = '#ef4444';
+    btnConfirm.style.color = 'white';
     btnConfirm.textContent = 'Ya, Hapus Permanen';
 
     const modal = document.getElementById('status-modal');

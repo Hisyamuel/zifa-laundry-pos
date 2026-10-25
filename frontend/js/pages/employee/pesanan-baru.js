@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const payBtns = document.querySelectorAll(".pay-btn");
     const btnSimpanCetak = document.getElementById("btn-simpan-cetak");
     const btnKirimWa = document.getElementById("btn-kirim-wa");
-    const btnLogout = document.querySelector(".logout-btn");
 
     // ==========================================
     // STATE ATAU VARIABEL GLOBAL
@@ -344,13 +343,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
     // INISIALISASI & EVENT LISTENERS
     // ==========================================
-    if (btnLogout) {
-        btnLogout.addEventListener("click", (e) => {
-            e.preventDefault();
-            window.location.href = "/frontend/pages/auth/auth.html";
-        });
-    }
-
     selectLayanan.addEventListener("change", updateRingkasan);
     inputKuantitas.addEventListener("input", updateRingkasan);
 

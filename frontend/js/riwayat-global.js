@@ -17,17 +17,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Format Tanggal (Contoh: 04 Okt 2026 · 09:12)
+// Format Tanggal (Contoh: 04 Okt 2026 · 09:12 WIB)
 function formatDateTime(dateString) {
     if (!dateString) return '-';
-    const date = new Date(dateString);
+    
+    // Menambahkan 'Z' agar string dibaca sebagai UTC murni oleh sistem
+    const validDateString = dateString.endsWith('Z') ? dateString : dateString + 'Z';
+    const date = new Date(validDateString);
 
-    const optionsDate = { day: '2-digit', month: 'short', year: 'numeric' };
+    // Kunci zona waktu secara spesifik ke WIB 
+    const optionsDate = { 
+        day: '2-digit', 
+        month: 'short', 
+        year: 'numeric',
+        timeZone: 'Asia/Jakarta'
+    };
     const datePart = date.toLocaleDateString('id-ID', optionsDate);
 
-    const timePart = date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace('.', ':');
+    const optionsTime = { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        timeZone: 'Asia/Jakarta'
+    };
+    const timePart = date.toLocaleTimeString('id-ID', optionsTime).replace('.', ':');
 
-    return `${datePart} · ${timePart}`;
+    return `${datePart} · ${timePart} WIB`;
 }
 
 // Format Uang
@@ -86,7 +100,7 @@ async function fetchRiwayat() {
 // Render Data ke Tabel
 function renderTable(data) {
     const tbody = document.getElementById('table-riwayat-body');
-    tbody.innerHTML = ''; // Kosongkan tabel sebelumnya
+    tbody.innerHTML = ''; 
 
     if (data.length === 0) {
         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px;">Tidak ada transaksi ditemukan.</td></tr>';
@@ -95,11 +109,15 @@ function renderTable(data) {
 
     data.forEach(item => {
         const badgeClass = getStatusBadgeClass(item.status);
+        
+        const waktuTampil = item.status === 'Selesai' && item.waktu_selesai 
+            ? formatDateTime(item.waktu_selesai) 
+            : '-';
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${item.resi}</td>
-            <td>${formatDateTime(item.tanggal)}</td>
+            <td>${waktuTampil}</td>
             <td>${item.pelanggan}</td>
             <td>${item.layanan}</td>
             <td><span class="${badgeClass}">${item.status}</span></td>

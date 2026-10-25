@@ -16,6 +16,7 @@ const getOrderHistory = async (req, res) => {
                 order_id,
                 resi_number,
                 transaction_date,
+                completed_at,
                 laundry_status,
                 payment_method,
                 total_cost,
@@ -24,7 +25,20 @@ const getOrderHistory = async (req, res) => {
             .order('transaction_date', { ascending: false });
 
         if (search) {
-            query = query.or(`resi_number.ilike.%${search}%, customer.name.ilike.%${search}%`);
+            // Mencari ID pelanggan yang namanya cocok dengan kata kunci pencarian
+            const { data: matchedCustomers } = await supabase
+                .from('customer')
+                .select('customer_id')
+                .ilike('name', `%${search}%`);
+
+            if (matchedCustomers && matchedCustomers.length > 0) {
+                // Jika nama pelanggan ditemukan, cari berdasarkan Resi atau ID Pelanggan tersebut
+                const custIds = matchedCustomers.map(c => `"${c.customer_id}"`).join(',');
+                query = query.or(`resi_number.ilike.%${search}%,customer_id.in.(${custIds})`);
+            } else {
+                // Jika tidak ada pelanggan yang cocok, fokus cari berdasarkan Nomor Resi saja
+                query = query.ilike('resi_number', `%${search}%`);
+            }
         }
 
         if (date) {
@@ -72,6 +86,7 @@ const getOrderHistory = async (req, res) => {
                 id: order.order_id,
                 resi: order.resi_number,
                 tanggal: order.transaction_date,
+                waktu_selesai: order.completed_at,
                 pelanggan: order.customer ? order.customer.name : 'Unknown',
                 layanan: layananLengkap,
                 status: order.laundry_status,
@@ -83,13 +98,12 @@ const getOrderHistory = async (req, res) => {
         return res.status(200).json({ status: 'success', data: formattedData });
 
     } catch (error) {
-        console.error('Error fetching order history:', error);
         return res.status(500).json({ status: 'error', message: 'Gagal memuat riwayat transaksi' });
     }
 };
 
 // GET: Ambil daftar layanan untuk dropdown pesanan baru
-const getLayanan = async (req, res) => {
+const getLayanan = async (_req, res) => {
     try {
         const { data, error } = await supabase
             .from('layanan')
@@ -213,15 +227,23 @@ const updateLaundryStatus = async (req, res) => {
     const { status } = req.body;
 
     try {
+        const updateData = { laundry_status: status };
+        
+        if (status === 'Selesai') {
+            updateData.completed_at = new Date().toISOString();
+        } else {
+            updateData.completed_at = null; 
+        }
+
         const { error } = await supabase
             .from('pesanan')
-            .update({ laundry_status: status })
+            .update(updateData)
             .eq('order_id', id);
 
         if (error) throw error;
         return res.status(200).json({ status: 'success', message: 'Status berhasil diperbarui' });
     } catch (error) {
-        console.error('Error updating status:', error);
+        console.error('Error updating laundry status:', error);
         return res.status(500).json({ status: 'error', message: 'Gagal memperbarui status cucian' });
     }
 };
