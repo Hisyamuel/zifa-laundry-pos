@@ -148,8 +148,9 @@ window.openStatusModal = function (id, name, nextStatus) {
     document.getElementById('modal-desc').innerHTML = `Apakah Anda yakin ingin mengubah status <strong>${name}</strong> menjadi <strong>${nextStatus}</strong>?`;
 
     const btnConfirm = document.getElementById('btn-confirm-modal');
-    btnConfirm.style.backgroundColor = nextStatus === 'Nonaktif' ? '#ef4444' : '#3b82f6';
-    btnConfirm.style.borderColor = nextStatus === 'Nonaktif' ? '#ef4444' : '#3b82f6';
+    btnConfirm.style.backgroundColor = nextStatus === 'Nonaktif' ? '#ef4444' : '#1e67db';
+    btnConfirm.style.borderColor = nextStatus === 'Nonaktif' ? '#ef4444' : '#1e67db';
+    btnConfirm.style.color = 'white';
     btnConfirm.textContent = 'Ya, Ubah Status';
 
     const modal = document.getElementById('status-modal');
