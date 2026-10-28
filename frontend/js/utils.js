@@ -35,3 +35,35 @@ function renderTable(data) {
         tbody.appendChild(tr);
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const sidebar = document.querySelector('.side');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    function toggleNav() {
+        hamburgerBtn.classList.toggle('active');
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
+    if (hamburgerBtn && sidebar) {
+        // Event saat tombol hamburger/X dipencet
+        hamburgerBtn.addEventListener('click', toggleNav);
+        
+        // Event agar sidebar tertutup jika area gelap (overlay) diklik
+        if (overlay) {
+            overlay.addEventListener('click', toggleNav);
+        }
+
+        // Tutup sidebar otomatis saat salah satu menu diklik (khusus mobile)
+        const navLinks = sidebar.querySelectorAll('.menu-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 760) {
+                    toggleNav();
+                }
+            });
+        });
+    }
+});

@@ -235,24 +235,24 @@ tr:last-child td {
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 14px;
-    align-items: center; 
+    align-items: center;
 }
 
 /* Mengatur Ulang Input & Select Khusus di dalam .bar agar tidak turun */
-.bar input, 
+.bar input,
 .bar select {
-    display: block; 
+    display: block;
     background: var(--sf);
     color: var(--tx);
     border: 1px solid var(--ln);
     border-radius: 9px;
-    padding: 8px 11px; 
+    padding: 8px 11px;
     font: inherit;
-    margin-top: 0 !important; 
-    width: auto; 
+    margin-top: 0 !important;
+    width: auto;
 }
 
-.bar input:focus, 
+.bar input:focus,
 .bar select:focus {
     border-color: var(--ink);
     outline: none;
@@ -305,27 +305,146 @@ tr:last-child td {
 }
 
 /* Responsivitas Layar Kecil */
+/* Gaya Tombol Hamburger */
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1000;
+}
+
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--tx);
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+    transform-origin: center;
+}
+
+/* Overlay Gelap */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(11, 26, 43, 0.6); 
+    backdrop-filter: blur(3px); 
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 1400px) {
+    .head-nav {
+        display: none;
+    }
+}
+
+
 @media (max-width: 760px) {
     .shell {
         grid-template-columns: 1fr;
     }
 
-    .side {
-        flex-direction: row;
-        overflow-x: auto;
-        border-right: 0;
+    .head-nav {
+        background-color: var(--sf);
         border-bottom: 1px solid var(--ln);
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 60px;
+        padding: 0 20px;
+        z-index: 1000;
     }
 
-    .side .who {
+    .head-nav .logo {
+        display: flex;
+        padding: 2px 8px;
+    }
+
+    .side .logo {
         display: none;
     }
 
-    .side button {
-        white-space: nowrap;
+    /* Hamburger di Kiri Atas */
+    .hamburger {
+        display: flex;
+        position: relative;
+        background: transparent !important;
+        z-index: 1000;
     }
 
+    .hamburger span {
+        background-color: var(--tx) !important;
+    }
+
+    /* Sidebar menjadi Panel Slide-in */
+    .side {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 240px;
+        height: calc(100vh - 60px);
+        flex-direction: column;
+        background: var(--sf);
+        border-right: 1px solid var(--ln);
+        border-bottom: none;
+        z-index: 999;
+        padding-top: 10px;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+    }
+
+    /* Class untuk memunculkan sidebar */
+    .side.active {
+        transform: translateX(0);
+    }
+
+    .side .who {
+        display: block;
+        margin-top: auto;
+    }
+
+    /* Main Content agar tidak tertutup tombol hamburger */
     .main {
-        padding: 18px 14px;
+        padding: 80px 14px 18px;
+    }
+
+    /* Animasi Hamburger berubah menjadi 'X' */
+    .hamburger.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+        background-color: var(--tx) !important;
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+        background-color: var(--tx) !important;
     }
 }
