@@ -71,6 +71,15 @@ a {
     color: var(--tx);
 }
 
+.lacak {
+    color: var(--ink-hover) !important;
+}
+
+.lacak:hover {
+    text-decoration: underline !important;
+    color: var(--ink) !important;
+}
+
 /* Tombol Global */
 .btn {
     display: inline-block;

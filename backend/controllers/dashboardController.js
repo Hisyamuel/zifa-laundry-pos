@@ -1,11 +1,25 @@
 const { createClient } = require('@supabase/supabase-js');
+const NodeCache = require('node-cache'); 
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Inisialisasi Cache dengan kedaluwarsa 5 menit (300 detik)
+const dashboardCache = new NodeCache({ stdTTL: 300 });
+
 const getDashboardStats = async (_req, res) => {
     try {
+        const cacheKey = 'dashboard_owner_data';
+        const cachedData = dashboardCache.get(cacheKey);
+
+        if (cachedData) {
+            console.log('Mengambil Dashboard dari Cache');
+            return res.status(200).json(cachedData);
+        }
+
+        console.log('Memproses kueri Dashboard dari Supabase');
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
         const startOfDay = today.toISOString();
@@ -68,7 +82,7 @@ const getDashboardStats = async (_req, res) => {
             total: Number(trx.total_cost || 0)
         }));
 
-        // --- Logika Chart Dinamis 7 Hari ---
+        // Logika Chart Dinamis 7 Hari
         const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
         const chartDataMap = {};
         
@@ -118,6 +132,9 @@ const getDashboardStats = async (_req, res) => {
                 transaksiTerbaru: transaksiTerbaru
             }
         };
+
+        // Simpan Payload ke dalam Memori
+        dashboardCache.set(cacheKey, responsePayload);
 
         return res.status(200).json(responsePayload);
 

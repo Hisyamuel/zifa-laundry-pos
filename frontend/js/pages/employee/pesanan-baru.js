@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <body>
                 <div class="center">
                     <h2>ZIFA LAUNDRY</h2>
-                    <p>Telp: 082159103747</p>
+                    <p>Telp: 080000000000</p>
                 </div>
                 <div class="divider"></div>
                 <p>No. Resi : ${data.noResi}</p>

@@ -304,6 +304,41 @@ tr:last-child td {
     border-color: var(--ink);
 }
 
+/* Pagination Riwayat Transaksi */
+.pagination-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: 20px;
+    padding-bottom: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.page-btn {
+    background-color: var(--sf);
+    border: 1px solid var(--tx);
+    color: var(--tx);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.page-btn:hover {
+    background-color: var(--hat);
+    color: var(--tx);
+}
+
+.page-btn.active {
+    background-color: var(--ink);
+    color: var(--on);
+    border-color: var(--ink);
+    font-weight: 600;
+}
+
 /* Responsivitas Layar Kecil */
 /* Gaya Tombol Hamburger */
 
@@ -337,8 +372,8 @@ tr:last-child td {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(11, 26, 43, 0.6); 
-    backdrop-filter: blur(3px); 
+    background: rgba(11, 26, 43, 0.6);
+    backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
     z-index: 998;
     opacity: 0;
