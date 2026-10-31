@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <body>
                 <div class="center">
                     <h2>ZIFA LAUNDRY</h2>
-                    <p>Telp: 080000000000</p>
+                    <p>Telp: 082182831285</p>
                 </div>
                 <div class="divider"></div>
                 <p>No. Resi : ${data.noResi}</p>
@@ -173,7 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (kuantitas > 0) {
             totalBiaya = harga * kuantitas;
-            const satuanTeks = tipe === "kilo" ? "kg" : "pcs";
+            
+            // Logika deteksi layanan tabung
+            const isTabung = namaLayanan.toLowerCase().includes('cuci saja') || 
+                             (namaLayanan.toLowerCase().includes('cuci kering') && !namaLayanan.toLowerCase().includes('setrika'));
+            const satuanTeks = tipe === "kilo" ? "kg" : (isTabung ? "tabung" : "pcs");
 
             ringkasanItems.innerHTML = `
                 <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px;">
@@ -245,9 +249,9 @@ document.addEventListener("DOMContentLoaded", () => {
             showToast("Koneksi terputus, memuat data layanan cadangan.", "error");
 
             const dummyData = [
-                { service_id: "L01", service_name: "Cuci Kering", type: "Kiloan", rate: 10000 },
-                { service_id: "L02", service_name: "Cuci Kering + Setrika", type: "Kiloan", rate: 15000 },
-                { service_id: "L03", service_name: "Cuci Saja", type: "Kiloan", rate: 8000 }
+                { service_id: "L01", service_name: "Cuci Kering", type: "Satuan", rate: 20000 },
+                { service_id: "L02", service_name: "Cuci Kering + Setrika", type: "Kiloan", rate: 6000 },
+                { service_id: "L03", service_name: "Cuci Saja", type: "Satuan", rate: 10000 }
             ];
             layananList = dummyData;
             renderLayananOptions(layananList);

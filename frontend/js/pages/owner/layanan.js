@@ -55,7 +55,13 @@ function renderTable(data) {
     }
 
     data.forEach(item => {
-        const satuanTarif = item.type === 'Kiloan' ? '/ kg' : '/ pcs';
+        // Logika dinamis untuk mengubah pcs menjadi tabung
+        const isTabung = item.service_name.toLowerCase().includes('cuci saja') || 
+                         (item.service_name.toLowerCase().includes('cuci kering') && !item.service_name.toLowerCase().includes('setrika'));
+        
+        let satuanTarif = item.type === 'Kiloan' ? '/ kg' : '/ pcs';
+        if (item.type === 'Satuan' && isTabung) satuanTarif = '/ tabung';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${item.service_name}</td>

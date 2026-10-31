@@ -1,5 +1,6 @@
 const { createClient } = require('@supabase/supabase-js');
 const dayjs = require('dayjs');
+const { dashboardCache } = require('./dashboardController');
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
@@ -74,7 +75,16 @@ const getOrderHistory = async (req, res) => {
                     }
                     const serviceName = detail.layanan ? detail.layanan.service_name : 'Unknown';
                     const serviceType = detail.layanan ? detail.layanan.type : '';
-                    const satuan = detail.quantity > 0 ? (serviceType === 'Kiloan' ? 'kg' : 'pcs') : '';
+                    
+                    // Logika deteksi tabung untuk riwayat
+                    const isTabung = serviceName.toLowerCase().includes('cuci saja') || 
+                                     (serviceName.toLowerCase().includes('cuci kering') && !serviceName.toLowerCase().includes('setrika'));
+                    
+                    let satuan = '';
+                    if (detail.quantity > 0) {
+                        satuan = serviceType === 'Kiloan' ? 'kg' : (isTabung ? 'tabung' : 'pcs');
+                    }
+                    
                     servicesMap[detail.order_id].push(`${serviceName} · ${detail.quantity} ${satuan}`);
                 });
             }
@@ -206,6 +216,8 @@ const createOrder = async (req, res) => {
 
         if (detailErr) throw detailErr;
 
+        dashboardCache.del('dashboard_owner_data');
+
         return res.status(201).json({
             status: 'success',
             message: 'Pesanan berhasil disimpan',
@@ -241,6 +253,9 @@ const updateLaundryStatus = async (req, res) => {
             .eq('order_id', id);
 
         if (error) throw error;
+
+        dashboardCache.del('dashboard_owner_data');
+        
         return res.status(200).json({ status: 'success', message: 'Status berhasil diperbarui' });
     } catch (error) {
         console.error('Error updating laundry status:', error);

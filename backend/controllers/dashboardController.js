@@ -145,5 +145,6 @@ const getDashboardStats = async (_req, res) => {
 };
 
 module.exports = {
-    getDashboardStats
+    getDashboardStats,
+    dashboardCache
 };

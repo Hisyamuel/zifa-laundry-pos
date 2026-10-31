@@ -72,8 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const cardHTML = `
                     <div class="k-card ${animationClass}">
                         <div>
-                            <div class="resi">${order.resi}</div>
                             <div class="cust">${order.pelanggan}</div>
+                            <div class="resi">${order.resi}</div>  
                             <div style="font-size: 11px; color: var(--mu); margin-top: 4px;">${order.layanan}</div>
                         </div>
                         ${btnHTML}
