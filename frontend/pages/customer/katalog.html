@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Katalog Layanan - Zifa Laundry</title>
+    <link rel="icon" href="/frontend/public/images/zifa-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/base.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2"></script>
+</head>
+
+<body class="loader">
+
+    <div class="container">
+        <!-- Navigasi Atas -->
+        <nav class="navbar">
+            <a href="/frontend/pages/index.html" class="logo"><i>Z</i>Zifa Laundry</a>
+            <div class="nav-links show-mobile">
+                <a href="/frontend/pages/customer/katalog.html" class="active">Layanan</a>
+                <a href="/frontend/pages/index.html#cara-kerja">Cara Kerja</a>
+                <a href="/frontend/pages/customer/lacak.html" class="lacak">Lacak Pesanan</a>
+            </div>
+        </nav>
+
+        <header class="page-head">
+            <h1>Katalog <span>Layanan</span></h1>
+            <p>Harga transparan tanpa biaya tersembunyi. Pilih layanan yang sesuai dengan kebutuhan cucian Anda.</p>
+        </header>
+
+        <main>
+            <div class="toolbar">
+                <div class="chips" id="filter-chips">
+                    <button class="chip active" data-filter="Semua">Semua</button>
+                    <button class="chip" data-filter="Kiloan">Kiloan</button>
+                    <button class="chip" data-filter="Satuan">Satuan</button>
+                </div>
+                <div class="search-box">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" id="search-input" class="field" placeholder="Cari layanan..." autocomplete="off">
+                </div>
+            </div>
+
+            <div id="catalog"></div>
+
+            <div class="cta-banner">
+                <div>
+                    <h3>Sudah menyerahkan cucian?</h3>
+                    <p>Masukkan nomor resi Anda untuk melihat status pakaian secara real-time.</p>
+                </div>
+                <a href="/frontend/pages/customer/lacak.html" class="btn btn-primary">Lacak Pesanan</a>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="logo" style="font-size: 16px;"><i>Z</i>Zifa Laundry</div>
+            <p>Bandar Lampung, Lampung. Melayani dengan kelembutan.</p>
+            <div class="footer-links">
+                <a href="/frontend/pages/auth/auth.html">Portal Internal Staf (POS)</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/frontend/js/pages/customer/katalog.js"></script>
+</body>
+
+</html>
