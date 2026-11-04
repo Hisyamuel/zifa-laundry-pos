@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Laporan Keuangan (Owner) - Zifa Laundry</title>
+    <link rel="icon" href="/frontend/public/images/zifa-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link rel="stylesheet" href="/frontend/css/component.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Tombol Hamburger -->
+    <div class="head-nav">
+        <button class="hamburger" id="hamburger-btn" aria-label="Buka navigasi">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="logo"><i>Z</i></div>
+    </div>
+
+    <!-- Elemen Overlay Gelap -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="shell">
+        <!-- Sidebar Menu -->
+        <nav class="side">
+            <div class="logo"><i>Z</i>Zifa Laundry</div>
+
+            <a href="/frontend/pages/owner/dashboard.html" class="menu-link">Dashboard</a>
+            <a href="/frontend/pages/owner/layanan.html" class="menu-link">Layanan & Tarif</a>
+            <a href="/frontend/pages/owner/pegawai.html" class="menu-link">Akun Pegawai</a>
+            <a href="/frontend/pages/owner/laporan.html" class="menu-link on">Laporan Keuangan</a>
+            <a href="/frontend/pages/owner/riwayat.html" class="menu-link">Riwayat Transaksi</a>
+
+            <a href="#" class="menu-link logout-btn">Keluar</a>
+
+            <div class="who">
+                Owner · Pemilik usaha
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main loader">
+            <!-- Header -->
+            <div class="hd">
+                <div>
+                    <h1>Laporan Keuangan</h1>
+                    <p>Rekap pendapatan dan transaksi.</p>
+                </div>
+                <div class="ac">
+                    <button class="b p" id="btn-unduh">Unduh laporan mingguan</button>
+                </div>
+            </div>
+
+            <!-- Filter Bar: Segmen & Date Picker -->
+            <div class="bar" style="margin-bottom: 24px;">
+                <div class="seg m" id="tab-filter">
+                    <!-- Elemen slider virtual untuk animasi -->
+                    <div class="slider-indicator" id="slider-indicator"></div>
+                    <button class="on" data-period="harian">Harian</button>
+                    <button data-period="mingguan">Mingguan</button>
+                    <button data-period="bulanan">Bulanan</button>
+                </div>
+                <input type="date" id="date-picker">
+            </div>
+
+            <div id="report-content" class="fade-transition">
+                <!-- Stats Row (Horizontal) -->
+                <div class="grid g3">
+                    <div class="card st">
+                        <small>Total pendapatan</small>
+                        <b id="val-total">Rp 0</b>
+                        <em id="val-date-1">-</em>
+                    </div>
+                    <div class="card st">
+                        <small>Jumlah transaksi</small>
+                        <b id="val-count">0</b>
+                        <em id="val-date-2">-</em>
+                    </div>
+                    <div class="card st">
+                        <small>Rata-rata per transaksi</small>
+                        <b id="val-avg">Rp 0</b>
+                        <em id="val-date-3">-</em>
+                    </div>
+                </div>
+
+                <!-- Rincian Transaksi Table -->
+                <div class="card">
+                    <h3 style="margin-bottom: 16px;">Rincian transaksi</h3>
+                    <div class="tw">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th id="th-label">Tanggal</th>
+                                    <th>Jumlah transaksi</th>
+                                    <th>Pendapatan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                <!-- Data akan dirender lewat JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="/frontend/js/guard.js"></script>
+    <script src="/frontend/js/utils.js"></script>
+    <script src="/frontend/js/pages/owner/laporan.js"></script>
+</body>
+
+</html>

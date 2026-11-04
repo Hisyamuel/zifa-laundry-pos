@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Layanan & Tarif (Owner) - Zifa Laundry</title>
+    <link rel="icon" href="/frontend/public/images/zifa-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link rel="stylesheet" href="/frontend/css/component.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Tombol Hamburger -->
+    <div class="head-nav">
+        <button class="hamburger" id="hamburger-btn" aria-label="Buka navigasi">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <div class="logo"><i>Z</i></div>
+    </div>
+
+    <!-- Elemen Overlay Gelap -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="shell">
+        <!-- Sidebar Menu -->
+        <nav class="side">
+            <div class="logo"><i>Z</i>Zifa Laundry</div>
+
+            <a href="/frontend/pages/owner/dashboard.html" class="menu-link">Dashboard</a>
+            <a href="/frontend/pages/owner/layanan.html" class="menu-link on">Layanan & Tarif</a>
+            <a href="/frontend/pages/owner/pegawai.html" class="menu-link">Akun Pegawai</a>
+            <a href="/frontend/pages/owner/laporan.html" class="menu-link">Laporan Keuangan</a>
+            <a href="/frontend/pages/owner/riwayat.html" class="menu-link">Riwayat Transaksi</a>
+
+            <a href="#" class="menu-link logout-btn">Keluar</a>
+
+            <div class="who">
+                Owner · Pemilik usaha
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main loader">
+            <!-- Header -->
+            <div class="hd">
+                <div>
+                    <h1>Layanan & Tarif</h1>
+                    <p>Kelola data master layanan dan harganya.</p>
+                </div>
+            </div>
+
+            <!-- Content Grid (2 Columns) -->
+            <div class="grid g2">
+                <!-- Tabel Daftar Layanan (Kiri) -->
+                <div class="card">
+                    <h3>Daftar layanan</h3>
+                    <div class="tw">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Layanan</th>
+                                    <th>Tipe</th>
+                                    <th>Tarif</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-layanan-body">
+                                <!-- Data akan di-render dari layanan.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Form Tambah Layanan (Kanan) -->
+                <form id="form-layanan" class="card">
+                    <!-- Hidden input untuk menyimpan ID saat mode Edit -->
+                    <input type="hidden" id="service-id-hidden">
+
+                    <label class="f">
+                        Nama layanan
+                        <input type="text" id="input-nama" placeholder="mis. Cuci Kering Lipat" required>
+                    </label>
+
+                    <label class="f">
+                        Tipe
+                        <select id="select-tipe" required>
+                            <option value="Kiloan">Kiloan</option>
+                            <option value="Satuan">Satuan</option>
+                        </select>
+                    </label>
+
+                    <label class="f">
+                        Tarif (Rp)
+                        <input type="number" id="input-tarif" placeholder="0" required min="0">
+                    </label>
+
+                    <!-- Tombol Simpan -->
+                    <button type="submit" id="btn-submit-layanan" class="b p w" style="margin-top: 10px;">Simpan layanan</button>
+                    
+                    <!-- Tombol Batal Edit (Tersembunyi secara default) -->
+                    <button type="button" id="btn-cancel-edit" class="b w" style="margin-top: 10px; display: none;">Batal</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Wadah untuk Toast Notification -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Custom Modal Konfirmasi Hapus -->
+    <div id="delete-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3>Konfirmasi Hapus</h3>
+            <p>Apakah Anda yakin ingin menghapus layanan <strong id="delete-service-name"></strong>?</p>
+            <div class="modal-actions">
+                <button id="btn-cancel-delete" class="b w">Batal</button>
+                <button id="btn-confirm-delete" class="b w" style="background-color: #ef4444; color: white;">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/frontend/js/guard.js"></script>
+    <script src="/frontend/js/utils.js"></script>
+    <script src="/frontend/js/pages/owner/layanan.js"></script>
+</body>
+
+</html>

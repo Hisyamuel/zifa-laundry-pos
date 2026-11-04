@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Status Cucian (Employee) - Zifa Laundry</title>
+    <link rel="icon" href="/frontend/public/images/zifa-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/component.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        
+        .kanban-board {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+            align-items: flex-start;
+            min-height: 70vh;
+        }
+
+        .kanban-col {
+            flex: 0 0 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .kanban-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--tx);
+            margin-bottom: 8px;
+        }
+
+        .kanban-badge {
+            background: var(--ln);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--tx);
+        }
+
+        .k-card {
+            background: var(--sf);
+            border: 1px solid var(--ln);
+            border-radius: 9px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Class untuk animasi saat ditekan (Fade Out) */
+        .k-card.fade-out {
+            opacity: 0 !important;
+            transform: scale(0.9) !important;
+        }
+
+        /* Class untuk animasi saat muncul di kolom baru (Fade In) */
+        .k-card.fade-in {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: scale(0.9) translateY(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Efek outline biru saat di-hover */
+        .k-card:hover {
+            border-color: var(--ink-hover);
+            box-shadow: 0 0 0 1px var(--ink-hover);
+        }
+
+        .k-card .resi {
+            font-size: 13px;
+            color: var(--tx);
+        }
+
+        .k-card .cust {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--tx);
+        }
+
+        /* Tombol Kanban */
+        .k-btn {
+            background: transparent;
+            border: 1px solid var(--ln);
+            color: var(--tx);
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .k-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--ink-hover);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shell">
+        <!-- Sidebar Kiri -->
+        <aside class="side">
+            <div class="logo"><i>Z</i> Zifa Laundry</div>
+            <a href="pesanan-baru.html" class="menu-link">Pesanan Baru</a>
+            <a href="status-cucian.html" class="menu-link on">Status Cucian</a>
+            <a href="riwayat.html" class="menu-link">Riwayat Transaksi</a>
+
+            <a href="#" class="menu-link logout-btn">Keluar</a>
+            
+            <div class="who">Employee · Pegawai</div>
+        </aside>
+
+        <!-- Konten Utama -->
+        <main class="main loader">
+            <header class="hd">
+                <div>
+                    <h1>Status Cucian</h1>
+                    <p>Pindahkan pesanan ke tahap berikutnya.</p>
+                </div>
+            </header>
+
+            <div class="kanban-board">
+                <!-- Kolom Dicuci -->
+                <div class="kanban-col">
+                    <div class="kanban-header">Dicuci <span class="kanban-badge" id="count-dicuci">0</span></div>
+                    <div id="col-Dicuci"></div>
+                </div>
+                <!-- Kolom Dikeringkan -->
+                <div class="kanban-col">
+                    <div class="kanban-header">Dikeringkan <span class="kanban-badge" id="count-dikeringkan">0</span>
+                    </div>
+                    <div id="col-Dikeringkan"></div>
+                </div>
+                <!-- Kolom Disetrika -->
+                <div class="kanban-col">
+                    <div class="kanban-header">Disetrika <span class="kanban-badge" id="count-disetrika">0</span></div>
+                    <div id="col-Disetrika"></div>
+                </div>
+                <!-- Kolom Siap Ambil -->
+                <div class="kanban-col">
+                    <div class="kanban-header">Siap Ambil <span class="kanban-badge" id="count-siap-ambil">0</span>
+                    </div>
+                    <div id="col-Siap Ambil"></div>
+                </div>
+                <!-- Kolom Selesai -->
+                <div class="kanban-col">
+                    <div class="kanban-header">Selesai <span class="kanban-badge" id="count-selesai">0</span></div>
+                    <div id="col-Selesai"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/frontend/js/guard.js"></script>
+    <script src="/frontend/js/pages/employee/status-cucian.js"></script>
+</body>
+
+</html>

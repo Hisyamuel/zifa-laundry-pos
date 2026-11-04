@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Riwayat Transaksi (Employee) - Zifa Laundry</title>
+    <link rel="icon" href="/frontend/public/images/zifa-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/layout.css">
+    <link rel="stylesheet" href="/frontend/css/component.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="shell">
+        <!-- Sidebar Menu -->
+        <nav class="side">
+            <div class="logo"><i>Z</i>Zifa Laundry</div>
+
+            <a href="/frontend/pages/employee/pesanan-baru.html" class="menu-link">Pesanan Baru</a>
+            <a href="/frontend/pages/employee/status-cucian.html" class="menu-link">Status Cucian</a>
+            <a href="/frontend/pages/employee/riwayat.html" class="menu-link on">Riwayat Transaksi</a>
+
+            <a href="#" class="menu-link logout-btn">Keluar</a>
+
+            <div class="who">
+                Employee · Pegawai
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main loader">
+            <!-- Header -->
+            <div class="hd">
+                <div>
+                    <h1>Riwayat Transaksi</h1>
+                    <p>Cari pesanan berdasarkan tanggal, nama pelanggan, atau nomor resi.</p>
+                </div>
+            </div>
+
+            <!-- Card Utama berisi Filter & Tabel -->
+            <div class="card">
+
+                <!-- Filter Bar -->
+                <div class="bar">
+                    <input type="text" id="input-search" placeholder="Cari nama pelanggan atau nomor resi" style="width: 300px;">
+                    <input type="date" id="input-date">
+                    <select id="select-status">
+                        <option value="Semua status">Semua status</option>
+                        <option value="Dicuci">Dicuci</option>
+                        <option value="Dikeringkan">Dikeringkan</option>
+                        <option value="Disetrika">Disetrika</option>
+                        <option value="Siap Ambil">Siap Ambil</option>
+                        <option value="Selesai">Selesai</option>
+                    </select>
+                    <button class="b p" id="btn-terapkan">Terapkan</button>
+                </div>
+
+                <!-- Table Container -->
+                <div class="tw" style="margin-top: 20px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No. resi</th>
+                                <th>Waktu Selesai</th>
+                                <th>Pelanggan</th>
+                                <th>Layanan</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Bayar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-riwayat-body">
+                            <!-- Data dirender lewat JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    
+    <script src="/frontend/js/guard.js"></script>
+    <script src="/frontend/js/utils.js"></script>
+    <script src="/frontend/js/riwayat-global.js"></script>   
+</body>
+
+</html>

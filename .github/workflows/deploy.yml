@@ -1,0 +1,39 @@
+name: Zifa Laundry POS CI/CD Pipeline
+
+# Pipeline akan berjalan otomatis saat ada kode yang di-push ke branch 'development'
+on:
+  push:
+    branches:
+      - development
+      - deployment
+      - production
+  pull_request:
+    branches:
+      - development
+      - deployment
+      - production
+
+jobs:
+  build-and-test:
+    name: Build and Test Application
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Mengambil kode terbaru dari repositori GitHub
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Menyiapkan lingkungan Node.js versi 22
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # 3. Menginstal dependensi backend
+      - name: Install Dependencies
+        run: npm install
+
+      # 4. Menguji perakitan Docker image untuk memastikan tidak ada error konfigurasi
+      - name: Build Docker Image
+        run: docker build -t zifa-laundry-pos:latest .
