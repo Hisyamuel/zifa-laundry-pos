@@ -1,8 +1,30 @@
+const { rateLimit } = require('express-rate-limit');
 const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+const timezone = require('dayjs/plugin/timezone');
+require('dayjs/locale/id');
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.locale('id');
+
+// --- KONFIGURASI RATE LIMIT ---
+const trackingLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // Durasi 1 menit
+    max: 10, // Maksimal 10 permintaan pencarian resi dari IP yang sama
+    message: {
+        status: 'error',
+        message: 'Terlalu banyak permintaan pelacakan. Silakan tunggu 1 menit sebelum mencoba lagi.'
+    },
+    standardHeaders: true, 
+    legacyHeaders: false, 
+});
 
 // Samarkan nama pelanggan: "Budi Santoso" -> "Budi S."
 const maskName = (name) => {
@@ -12,7 +34,7 @@ const maskName = (name) => {
     return rest ? `${parts[0]} ${rest}` : parts[0];
 };
 
-// GET: Lacak pesanan berdasarkan nomor resi (publik, tanpa login)
+// GET: Lacak pesanan berdasarkan nomor resi 
 const trackOrder = async (req, res) => {
     const resi = (req.params.resi || '').trim().toUpperCase();
 
@@ -53,7 +75,7 @@ const trackOrder = async (req, res) => {
             data: {
                 resi: order.resi_number,
                 pelanggan: maskName(order.customer ? order.customer.name : ''),
-                tanggal: order.transaction_date,
+                tanggal: dayjs(order.transaction_date).tz('Asia/Jakarta').format('DD MMMM YYYY, HH:mm') + ' WIB',
                 status: order.laundry_status,
                 pembayaran: order.payment_status,
                 total: Number(order.total_cost),
@@ -65,4 +87,4 @@ const trackOrder = async (req, res) => {
     }
 };
 
-module.exports = { trackOrder };
+module.exports = { trackingLimiter, trackOrder };

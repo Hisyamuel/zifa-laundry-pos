@@ -46,11 +46,23 @@ document.addEventListener("DOMContentLoaded", () => {
             if (el) el.innerHTML = '';
         });
 
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         const activeOrders = orders.filter(o => o.status !== 'Selesai');
-        const finishedOrders = orders.filter(o => o.status === 'Selesai');
+
+        // Filter pesanan selesai (hanya ambil yang selesai HARI INI)
+        const finishedOrdersToday = orders.filter(o => {
+            if (o.status !== 'Selesai') return false;
+            
+            if (!o.waktu_selesai) return false; 
+            
+            const completedDate = new Date(o.waktu_selesai);
+            return completedDate >= today;
+        });
 
         // Hanya ambil 5 pesanan Selesai terbaru agar tidak menumpuk ke bawah
-        const limitedFinishedOrders = finishedOrders.slice(0, 5);
+        const limitedFinishedOrders = finishedOrdersToday.slice(0, 5);
 
         // Gabungkan kembali untuk dirender
         const ordersToDisplay = [...activeOrders, ...limitedFinishedOrders];
@@ -83,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        counts['Selesai'] = finishedOrders.length;
+        counts['Selesai'] = finishedOrdersToday.length;
 
         // Reset pelacak animasi setelah render selesai
         lastMovedOrderId = null;

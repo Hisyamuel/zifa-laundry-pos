@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const groups = [
             { type: 'Kiloan', title: 'Layanan Kiloan', note: 'dihitung per kilogram' },
-            { type: 'Satuan', title: 'Layanan Satuan', note: 'dihitung per item / tabung' }
+            { type: 'Satuan', title: 'Layanan Satuan', note: 'dihitung per tabung' }
         ];
 
         catalogEl.innerHTML = groups.map(g => {

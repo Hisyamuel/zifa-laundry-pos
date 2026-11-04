@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const STEPS = [
         { status: 'Dicuci', icon: 'ph-washing-machine', desc: 'Pakaian Anda sedang dicuci.' },
         { status: 'Dikeringkan', icon: 'ph-wind', desc: 'Pakaian Anda sedang dikeringkan.' },
-        { status: 'Disetrika', icon: 'ph-iron', desc: 'Pakaian Anda sedang disetrika dan dirapikan.' },
+        { status: 'Disetrika', icon: 'ph ph-t-shirt', desc: 'Pakaian Anda sedang disetrika dan dirapikan.' },
         { status: 'Siap Ambil', icon: 'ph-package', desc: 'Cucian sudah siap, silakan diambil di gerai.' },
         { status: 'Selesai', icon: 'ph-check-circle', desc: 'Pesanan telah diambil. Terima kasih!' }
     ];
@@ -24,11 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formatRupiah = (n) => 'Rp ' + Number(n).toLocaleString('id-ID');
 
-    function formatDateTime(iso) {
-        const d = new Date(iso);
-        if (isNaN(d)) return '-';
-        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) +
-            ', ' + d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace('.', ':');
+    function formatDateTime(str) {
+        return str || '-';
     }
 
     function showError(message) {

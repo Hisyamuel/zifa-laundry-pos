@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let totalBiaya = 0;
     let selectedMethod = "tunai";
     let layananList = [];
-    let lastSavedOrder = null; 
+    let lastSavedOrder = null;
 
     // ==========================================
     // HELPER & UTILITY FUNCTIONS
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p>Pelanggan: ${data.pelanggan}</p>
                 <div class="divider"></div>
                 <div class="row">
-                    <span>${data.layanan} (${data.kuantitas})</span>
+                    <span>${data.layanan} (${data.kuantitas} ${data.satuan})</span>
                 </div>
                 <div class="row">
                     <span>Total</span>
@@ -173,10 +173,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (kuantitas > 0) {
             totalBiaya = harga * kuantitas;
-            
+
             // Logika deteksi layanan tabung
-            const isTabung = namaLayanan.toLowerCase().includes('cuci saja') || 
-                             (namaLayanan.toLowerCase().includes('cuci kering') && !namaLayanan.toLowerCase().includes('setrika'));
+            const isTabung = namaLayanan.toLowerCase().includes('cuci saja') ||
+                (namaLayanan.toLowerCase().includes('cuci kering') && !namaLayanan.toLowerCase().includes('setrika'));
             const satuanTeks = tipe === "kilo" ? "kg" : (isTabung ? "tabung" : "pcs");
 
             ringkasanItems.innerHTML = `
@@ -298,11 +298,20 @@ document.addEventListener("DOMContentLoaded", () => {
                     noResi: noResi
                 };
 
+                const optionTerpilih = selectLayanan.options[selectLayanan.selectedIndex];
+                const tipeLayanan = optionTerpilih.dataset.tipe;
+                const namaLayanan = optionTerpilih.dataset.nama;
+
+                const isLayananTabung = namaLayanan.toLowerCase().includes('cuci saja') ||
+                    (namaLayanan.toLowerCase().includes('cuci kering') && !namaLayanan.toLowerCase().includes('setrika'));
+                const satuanLayanan = tipeLayanan === "kilo" ? "kg" : (isLayananTabung ? "tabung" : "pcs");
+
                 const printData = {
                     noResi: noResi,
                     pelanggan: payload.pelanggan,
-                    layanan: selectLayanan.options[selectLayanan.selectedIndex].dataset.nama,
+                    layanan: namaLayanan,
                     kuantitas: payload.kuantitas,
+                    satuan: satuanLayanan,
                     total: payload.total_biaya,
                     metode: payload.metode_bayar
                 };
@@ -319,6 +328,14 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Gagal mengirim pesanan:", error);
             const noResi = "ZL-" + Math.floor(1000 + Math.random() * 9000);
 
+            const optionTerpilih = selectLayanan.options[selectLayanan.selectedIndex];
+            const tipeLayanan = optionTerpilih.dataset.tipe;
+            const namaLayanan = optionTerpilih.dataset.nama;
+
+            const isLayananTabung = namaLayanan.toLowerCase().includes('cuci saja') ||
+                (namaLayanan.toLowerCase().includes('cuci kering') && !namaLayanan.toLowerCase().includes('setrika'));
+            const satuanLayanan = tipeLayanan === "kilo" ? "kg" : (isLayananTabung ? "tabung" : "pcs");
+
             lastSavedOrder = {
                 pelanggan: payload.pelanggan,
                 no_hp: payload.no_hp,
@@ -328,8 +345,9 @@ document.addEventListener("DOMContentLoaded", () => {
             printResi({
                 noResi: noResi,
                 pelanggan: payload.pelanggan,
-                layanan: selectLayanan.options[selectLayanan.selectedIndex].dataset.nama,
+                layanan: namaLayanan,
                 kuantitas: payload.kuantitas,
+                satuan: satuanLayanan,
                 total: payload.total_biaya,
                 metode: payload.metode_bayar
             });
