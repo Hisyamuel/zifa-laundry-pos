@@ -76,7 +76,8 @@ const getFinancialReport = async (req, res) => {
             const sessions = { pagi: { count: 0, sum: 0 }, siang: { count: 0, sum: 0 }, sore: { count: 0, sum: 0 }, malam: { count: 0, sum: 0 } };
 
             orders.forEach(order => {
-                const hour = dayjs(order.transaction_date).hour();
+                const orderDate = dayjs(order.transaction_date).add(7, 'hour'); // Menyesuaikan dari UTC ke WIB (UTC+7)
+                const hour = orderDate.hour();
                 if (hour >= 8 && hour < 12) { 
                     sessions.pagi.count++; 
                     sessions.pagi.sum += Number(order.total_cost); 
@@ -219,7 +220,8 @@ const exportFinancialReport = async (req, res) => {
             const sessions = { pagi: { count: 0, sum: 0 }, siang: { count: 0, sum: 0 }, sore: { count: 0, sum: 0 }, malam: { count: 0, sum: 0 } };
 
             orders.forEach(order => {
-                const hour = dayjs(order.transaction_date).hour();
+                const orderDate = dayjs(order.transaction_date).add(7, 'hour'); // Menyesuaikan dari UTC ke WIB (UTC+7)
+                const hour = orderDate.hour();;
                 if (hour >= 8 && hour < 12) { 
                     sessions.pagi.count++; 
                     sessions.pagi.sum += Number(order.total_cost); 
