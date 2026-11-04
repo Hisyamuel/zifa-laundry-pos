@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "https://zifa-laundry-pos.onrender.com/api/$1"
+        }
+    ]
+}
