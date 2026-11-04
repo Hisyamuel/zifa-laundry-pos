@@ -3,6 +3,29 @@
         {
             "source": "/api/(.*)",
             "destination": "https://zifa-laundry-pos.onrender.com/api/$1"
+        },
+        {
+            "source": "/",
+            "destination": "/frontend/index.html"
+        },
+        {
+            "source": "/((?!api/).*)",
+            "destination": "/frontend/pages/$1"
+        }
+    ],
+    "headers": [
+        {
+            "source": "/",
+            "headers": [
+                {
+                    "key": "X-Frame-Options",
+                    "value": "DENY"
+                },
+                {
+                    "key": "X-XSS-Protection",
+                    "value": "1; mode=block"
+                }
+            ]
         }
     ]
 }
