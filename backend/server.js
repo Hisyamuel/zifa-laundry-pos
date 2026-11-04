@@ -28,6 +28,11 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api', publicRoutes);
 
+// Mengalihkan akses dari jalur utama (root) ke halaman antarmuka
+app.get('/', (_req, res) => {
+    res.redirect('/frontend/index.html'); 
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
