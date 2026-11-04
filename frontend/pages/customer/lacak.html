@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Lacak Cucian - Zifa Laundry</title>
+    <link rel="icon" href="/frontend/public/images/zifa-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/frontend/css/variables.css">
+    <link rel="stylesheet" href="/frontend/css/base.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Navigasi Atas -->
+        <nav class="navbar">
+            <div class="logo"><i>Z</i>Zifa Laundry</div>
+            <div class="nav-links show-mobile">
+                <a href="/frontend/pages/customer/katalog.html">Katalog</a>
+                <a href="/frontend/pages/customer/lacak.html" class="active">Lacak Cucian</a>
+            </div>
+        </nav>
+
+        <header class="page-head loader">
+            <h1>Lacak <span>Cucian</span> Anda</h1>
+            <p>Masukkan nomor resi yang Anda terima dari kasir atau WhatsApp untuk melihat status cucian.</p>
+        </header>
+
+        <main>
+            <form id="track-form" class="track-form" autocomplete="off">
+                <input type="text" id="resi-input" class="field" placeholder="Contoh: ZL-XXXXXXXX" maxlength="50"
+                    required>
+                <button type="submit" id="track-btn" class="btn btn-primary">Lacak</button>
+            </form>
+            <p class="track-hint">Nomor resi diawali dengan <strong>ZL-</strong> dan tertera pada struk Anda.</p>
+
+            <div id="track-result" class="track-result"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="logo" style="font-size: 16px;"><i>Z</i>Zifa Laundry</div>
+            <p>Bandar Lampung, Lampung. Melayani dengan kelembutan.</p>
+            <div class="footer-links">
+                <a href="/frontend/pages/index.html">Kembali ke Beranda</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/frontend/js/pages/customer/lacak.js"></script>
+</body>
+
+</html>
