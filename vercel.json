@@ -5,17 +5,13 @@
             "destination": "https://zifa-laundry-pos.onrender.com/api/$1"
         },
         {
-            "source": "/",
-            "destination": "/frontend/index.html"
-        },
-        {
             "source": "/((?!api/).*)",
             "destination": "/frontend/$1"
         }
     ],
     "headers": [
         {
-            "source": "/",
+            "source": "/(.*)",
             "headers": [
                 {
                     "key": "X-Frame-Options",
