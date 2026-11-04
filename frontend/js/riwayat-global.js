@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             const isoSevenDaysAgo = sevenDaysAgo.toISOString();
 
-            let url = new URL('http://localhost:3000/api/orders');
+            let url = new URL('/api/orders');
 
             if (searchValue) url.searchParams.append('search', searchValue);
             if (dateValue) {

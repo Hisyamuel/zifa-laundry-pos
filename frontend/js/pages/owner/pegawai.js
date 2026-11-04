@@ -29,7 +29,7 @@ function showToast(message, type = 'success') {
 // === FETCH & RENDER DATA ===
 async function fetchEmployees() {
     try {
-        const response = await fetch('http://localhost:3000/api/employees');
+        const response = await fetch('/api/employees');
         const result = await response.json();
         if (response.ok) processAndRenderData(result.data);
     } catch (error) {
@@ -128,7 +128,7 @@ function updateSidebarNavCount(pendingCount) {
 // === AKSI: SETUJUI (Tanpa Modal) ===
 async function approveAccount(id) {
     try {
-        const response = await fetch(`http://localhost:3000/api/employees/${id}/approve`, { method: 'PUT' });
+        const response = await fetch(`/api/employees/${id}/approve`, { method: 'PUT' });
         const result = await response.json();
         if (response.ok) {
             showToast(result.message, 'success');
@@ -199,10 +199,10 @@ async function executeStatusChange() {
 
         // Route: Memisahkan DELETE dan PUT
         if (targetStatus === 'Tolak') {
-            url = `http://localhost:3000/api/employees/${currentEmployeeId}/reject`;
+            url = `/api/employees/${currentEmployeeId}/reject`;
             options.method = 'DELETE';
         } else {
-            url = `http://localhost:3000/api/employees/${currentEmployeeId}/toggle-status`;
+            url = `/api/employees/${currentEmployeeId}/toggle-status`;
             options.method = 'PUT';
             options.body = JSON.stringify({ newStatus: targetStatus });
         }

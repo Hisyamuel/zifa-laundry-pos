@@ -38,7 +38,7 @@ function showToast(message, type = 'success') {
 // === READ: Tampilkan Data ===
 async function fetchServices() {
     try {
-        const response = await fetch('http://localhost:3000/api/services');
+        const response = await fetch('/api/services');
         const result = await response.json();
         renderTable(result.data);
     } catch (error) {
@@ -99,11 +99,11 @@ async function handleFormSubmit(e) {
     btnSubmit.disabled = true;
 
     try {
-        let url = 'http://localhost:3000/api/services';
+        let url = '/api/services';
         let method = 'POST'; 
 
         if (idHidden) {
-            url = `http://localhost:3000/api/services/${idHidden}`;
+            url = `/api/services/${idHidden}`;
             method = 'PUT';
         }
 
@@ -186,7 +186,7 @@ async function executeDelete() {
     btnConfirm.disabled = true;
 
     try {
-        const response = await fetch(`http://localhost:3000/api/services/${serviceIdToDelete}`, {
+        const response = await fetch(`/api/services/${serviceIdToDelete}`, {
             method: 'DELETE'
         });
         const result = await response.json();

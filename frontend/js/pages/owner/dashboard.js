@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function initDashboard() {
     try {
         // Sesuaikan PORT dengan konfigurasi server Node.js lokal 
-        const response = await fetch('http://localhost:3000/api/dashboard');
+        const response = await fetch('/api/dashboard');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

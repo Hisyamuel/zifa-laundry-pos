@@ -70,7 +70,7 @@ function loadDataWithAnimation() {
 // --- FUNGSI UTAMA FETCH ---
 async function fetchReportData() {
     try {
-        let url = `http://localhost:3000/api/reports?period=${currentPeriod}`;
+        let url = `/api/reports?period=${currentPeriod}`;
         if (currentDate) {
             url += `&date=${currentDate}`;
         }
@@ -145,7 +145,7 @@ function renderDashboard(data) {
 // --- FUNGSI UNDUH CSV ---
 async function downloadCSV() {
     try {
-        let url = `http://localhost:3000/api/reports/export?period=${currentPeriod}`;
+        let url = `/api/reports/export?period=${currentPeriod}`;
         if (currentDate) {
             url += `&date=${currentDate}`;
         }
