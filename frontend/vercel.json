@@ -9,8 +9,8 @@
             "destination": "/frontend/index.html"
         },
         {
-            "source": "/((?!api/).*)",
-            "destination": "/frontend/pages/$1"
+            "source": "/:file.html",
+            "destination": "/pages/:file.html"
         }
     ],
     "headers": [
