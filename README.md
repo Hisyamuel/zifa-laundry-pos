@@ -14,14 +14,18 @@ Proyek ini mengadopsi arsitektur terdistribusi (*Decoupled Architecture*), di ma
 
 ### Diagram Arsitektur
 
-```
+
 ![Diagram Use Case](frontend/public/images/usecase-diagram.drawio.png)
+
 ![Diagram Activity](frontend/public/images/activity-diagram.jpg)
+
 ![Diagram Sequence](frontend/public/images/sequence-diagram.jpg)
+
 ![Diagram Class](frontend/public/images/Class-Diagram.drawio.png)
+
 ![Diagram ERD](frontend/public/images/ERD.drawio.png)
 
-```
+
 
 ## Tools & Teknologi Pengembangan
 
