@@ -14,10 +14,12 @@ const publicRoutes = require('./routes/publicRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.set('trust proxy', 1);
+
 app.use(cors());
 app.use(express.json());
 
-app.use('/frontend', express.static(path.join(__dirname, '../frontend')));
+app.use('/frontend', express.static(path.join(process.cwd(), 'frontend')));
 
 // Memasang rute pada jalur /api/
 app.use('/api/auth', authRoutes);
@@ -26,7 +28,12 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api', require('./routes/publicRoutes'));
+app.use('/api', publicRoutes);
+
+// Mengalihkan akses dari jalur utama (root) ke halaman antarmuka
+app.get('/', (_req, res) => {
+    res.redirect('/frontend/index.html'); 
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

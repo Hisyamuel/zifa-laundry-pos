@@ -76,11 +76,25 @@ const getFinancialReport = async (req, res) => {
             const sessions = { pagi: { count: 0, sum: 0 }, siang: { count: 0, sum: 0 }, sore: { count: 0, sum: 0 }, malam: { count: 0, sum: 0 } };
 
             orders.forEach(order => {
-                const hour = dayjs(order.transaction_date).hour();
-                if (hour >= 8 && hour < 12) { sessions.pagi.count++; sessions.pagi.sum += Number(order.total_cost); }
-                else if (hour >= 12 && hour < 16) { sessions.siang.count++; sessions.siang.sum += Number(order.total_cost); }
-                else if (hour >= 16 && hour <= 20) { sessions.sore.count++; sessions.sore.sum += Number(order.total_cost); }
-                else if (hour > 20 || hour < 24) { sessions.malam.count++; sessions.malam.sum += Number(order.total_cost); }
+                const orderDate = dayjs(order.transaction_date).add(7, 'hour'); // Menyesuaikan dari UTC ke WIB (UTC+7)
+                const hour = orderDate.hour();
+                if (hour >= 8 && hour < 12) { 
+                    sessions.pagi.count++; 
+                    sessions.pagi.sum += Number(order.total_cost); 
+                }
+                else if (hour >= 12 && hour < 16) { 
+                    sessions.siang.count++; 
+                    sessions.siang.sum += Number(order.total_cost); 
+                }
+                else if (hour >= 16 && hour < 20) { 
+                    sessions.sore.count++; 
+                    sessions.sore.sum += Number(order.total_cost); 
+                }
+                else { 
+                    // Mencakup jam 20:00 hingga 07:59 pagi berikutnya
+                    sessions.malam.count++; 
+                    sessions.malam.sum += Number(order.total_cost); 
+                }
             });
 
             groupedData = [
@@ -206,11 +220,25 @@ const exportFinancialReport = async (req, res) => {
             const sessions = { pagi: { count: 0, sum: 0 }, siang: { count: 0, sum: 0 }, sore: { count: 0, sum: 0 }, malam: { count: 0, sum: 0 } };
 
             orders.forEach(order => {
-                const hour = dayjs(order.transaction_date).hour();
-                if (hour >= 8 && hour < 12) { sessions.pagi.count++; sessions.pagi.sum += Number(order.total_cost); }
-                else if (hour >= 12 && hour < 16) { sessions.siang.count++; sessions.siang.sum += Number(order.total_cost); }
-                else if (hour >= 16 && hour <= 20) { sessions.sore.count++; sessions.sore.sum += Number(order.total_cost); }
-                else if (hour >= 20 && hour <= 24) { sessions.malam.count++; sessions.malam.sum += Number(order.total_cost); }
+                const orderDate = dayjs(order.transaction_date).add(7, 'hour'); // Menyesuaikan dari UTC ke WIB (UTC+7)
+                const hour = orderDate.hour();;
+                if (hour >= 8 && hour < 12) { 
+                    sessions.pagi.count++; 
+                    sessions.pagi.sum += Number(order.total_cost); 
+                }
+                else if (hour >= 12 && hour < 16) { 
+                    sessions.siang.count++; 
+                    sessions.siang.sum += Number(order.total_cost); 
+                }
+                else if (hour >= 16 && hour < 20) { 
+                    sessions.sore.count++; 
+                    sessions.sore.sum += Number(order.total_cost); 
+                }
+                else { 
+                    // Mencakup jam 20:00 hingga 07:59 pagi berikutnya
+                    sessions.malam.count++; 
+                    sessions.malam.sum += Number(order.total_cost); 
+                }
             });
 
             groupedData = [
