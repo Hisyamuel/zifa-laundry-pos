@@ -200,8 +200,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function handleKirimWa() {
-        let pelanggan = document.getElementById("pelanggan").value;
-        let noHp = document.getElementById("no_hp").value;
+        let pelanggan = document.getElementById("pelanggan").value.trim();
+        let noHp = document.getElementById("no_hp").value.trim();
         let noResi = "";
 
         // Jika form sudah di-reset setelah simpan, gunakan data dari simpanan terakhir
@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (!pelanggan || !noHp) {
-            showToast("Harap lengkapi data pelanggan terlebih dahulu.", "error");
+            showToast("Harap lengkapi nama dan nomor WhatsApp pelanggan terlebih dahulu.", "error");
             return;
         }
 
@@ -261,6 +261,15 @@ document.addEventListener("DOMContentLoaded", () => {
     async function handleSubmit(e) {
         e.preventDefault();
 
+        const formData = new FormData(formPesanan);
+        const cleanPelanggan = (formData.get("pelanggan") || "").trim();
+        const cleanNoHp = (formData.get("no_hp") || "").trim();
+
+        if (!cleanPelanggan) {
+            showToast("Nama pelanggan wajib diisi.", "error");
+            return;
+        }
+
         if (totalBiaya <= 0) {
             showToast("Harap lengkapi data layanan dan jumlah/berat.", "error");
             return;
@@ -270,10 +279,9 @@ document.addEventListener("DOMContentLoaded", () => {
         btnSimpanCetak.disabled = true;
         btnSimpanCetak.textContent = "Memproses...";
 
-        const formData = new FormData(formPesanan);
         const payload = {
-            pelanggan: formData.get("pelanggan"),
-            no_hp: formData.get("no_hp"),
+            pelanggan: cleanPelanggan,
+            no_hp: cleanNoHp,
             layanan_id: formData.get("layanan_id"),
             kuantitas: parseFloat(formData.get("kuantitas")),
             total_biaya: totalBiaya,

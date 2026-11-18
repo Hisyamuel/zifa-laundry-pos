@@ -132,22 +132,37 @@ const getLayanan = async (_req, res) => {
 const createOrder = async (req, res) => {
     const { pelanggan, no_hp, layanan_id, kuantitas, total_biaya, metode_bayar } = req.body;
 
+    const cleanName = (pelanggan || '').trim();
+    const cleanPhone = (no_hp || '').trim();
+
+    if (!cleanName) {
+        return res.status(400).json({ status: 'error', message: 'Nama pelanggan wajib diisi' });
+    }
+
     try {
         // Cek atau Tambah Customer
         let customerId;
-        const { data: existCust, error: errCust } = await supabase
-            .from('customer')
-            .select('customer_id')
-            .eq('phone_number', no_hp)
-            .maybeSingle();
+        let existCust = null;
 
-        if (errCust) throw errCust;
+        // Hanya cari pelanggan lama jika nomor HP diisi dan namanya cocok
+        if (cleanPhone) {
+            const { data, error: errCust } = await supabase
+                .from('customer')
+                .select('customer_id')
+                .eq('phone_number', cleanPhone)
+                .ilike('name', cleanName)
+                .limit(1)
+                .maybeSingle();
+
+            if (errCust) throw errCust;
+            existCust = data;
+        }
 
         if (!existCust) {
             const generatedCustId = 'CUS-' + Date.now();
             const { data: newCust, error: newCustErr } = await supabase
                 .from('customer')
-                .insert([{ customer_id: generatedCustId, name: pelanggan, phone_number: no_hp }])
+                .insert([{ customer_id: generatedCustId, name: cleanName, phone_number: cleanPhone }])
                 .select('customer_id')
                 .single();
 
